@@ -1,13 +1,13 @@
 """
-Script for running Argument Relation Classification (ARC) on extracted claims.
+Script for running Argument Relation Classification (ARC) on extracted arguments.
 
 This script:
 1. Loads extracted argument files
-2. Extracts all <claim> tags from the extracted_arguments
+2. Extracts all <argument> tags from the extracted_arguments
 3. Loads report statements from debate directories (core claims)
 4. Classifies relations between:
-   - Mined claims vs report statements (support, attack, no relation)
-   - All pairs of mined claims (support, attack, no relation)
+   - Mined arguments vs report statements (support, attack, no relation)
+   - All pairs of mined arguments (support, attack, no relation)
 5. Does NOT classify relations between report statements
 """
 
@@ -51,27 +51,27 @@ def is_president_intervention(speaker: Optional[str]) -> bool:
     return False
 
 
-def extract_claims(extracted_arguments: str) -> List[str]:
+def extract_arguments(extracted_arguments: str) -> List[str]:
     """
-    Extract all claims from the extracted_arguments text.
+    Extract all arguments from the extracted_arguments text.
     
     Args:
-        extracted_arguments: Text containing <claim> tags
+        extracted_arguments: Text containing <argument> tags
         
     Returns:
-        List of claim texts
+        List of argument texts
     """
     if not extracted_arguments:
         return []
     
-    # Pattern to match <claim>...</claim> tags
-    pattern = r'<claim>(.*?)</claim>'
-    claims = re.findall(pattern, extracted_arguments, re.DOTALL)
+    # Pattern to match <argument>...</argument> tags
+    pattern = r'<argument>(.*?)</argument>'
+    arguments = re.findall(pattern, extracted_arguments, re.DOTALL)
     
-    # Clean up claims (strip whitespace)
-    claims = [claim.strip() for claim in claims if claim.strip()]
+    # Clean up arguments (strip whitespace, filter out "NA")
+    arguments = [arg.strip() for arg in arguments if arg.strip() and arg.strip().upper() != "NA"]
     
-    return claims
+    return arguments
 
 
 def load_extracted_files(input_dir: str) -> List[Dict]:
@@ -166,18 +166,18 @@ def load_report_statements(debate_dir: str) -> List[Dict]:
     return all_statements
 
 
-def collect_all_claims(extracted_results: List[Dict]) -> Dict[str, List[Dict]]:
+def collect_all_arguments(extracted_results: List[Dict]) -> Dict[str, List[Dict]]:
     """
-    Collect all claims from extracted results, grouped by debate_id.
-    Filters out claims from president interventions.
+    Collect all arguments from extracted results, grouped by debate_id.
+    Filters out arguments from president interventions.
     
     Args:
         extracted_results: List of extraction result dictionaries
         
     Returns:
-        Dictionary mapping debate_id to list of claim dictionaries
+        Dictionary mapping debate_id to list of argument dictionaries
     """
-    claims_by_debate = {}
+    arguments_by_debate = {}
     skipped_president_count = 0
     
     for result in extracted_results:
@@ -192,37 +192,34 @@ def collect_all_claims(extracted_results: List[Dict]) -> Dict[str, List[Dict]]:
             skipped_president_count += 1
             continue
         
-        claims = extract_claims(extracted_args)
+        arguments = extract_arguments(extracted_args)
         
         # Initialize list for this debate if not exists
-        if debate_id not in claims_by_debate:
-            claims_by_debate[debate_id] = []
+        if debate_id not in arguments_by_debate:
+            arguments_by_debate[debate_id] = []
         
-        for i, claim in enumerate(claims):
-            if claim != "NA":
-                claims_by_debate[debate_id].append({
-                    'claim_id': f"{intervention_id}_claim_{i+1}",
-                    'claim_text': claim,
-                    'intervention_id': intervention_id,
-                    'debate_id': debate_id,
-                    'speaker': speaker,
-                    'agenda_item': agenda_item
-                })
+        for i, argument in enumerate(arguments):
+            arguments_by_debate[debate_id].append({
+                'argument_id': f"{intervention_id}_arg_{i+1}",
+                'argument_text': argument,
+                'intervention_id': intervention_id,
+                'debate_id': debate_id,
+                'speaker': speaker,
+                'agenda_item': agenda_item
+            })
     
-    total_claims = sum(len(claims) for claims in claims_by_debate.values())
-    
-    return claims_by_debate
+    return arguments_by_debate
 
 
-def classify_claim_pairs(model: ArgumentRelationModel, claims: List[Dict], 
+def classify_argument_pairs(model: ArgumentRelationModel, arguments: List[Dict], 
                         debate_id: str, topic: str = "", output_file: Optional[str] = None,
                         max_pairs: Optional[int] = None) -> List[Dict]:
     """
-    Classify relations between all pairs of claims within the same debate.
+    Classify relations between all pairs of arguments within the same debate.
     
     Args:
         model: Loaded ArgumentRelationModel
-        claims: List of claim dictionaries (all from same debate)
+        arguments: List of argument dictionaries (all from same debate)
         debate_id: ID of the debate
         topic: Topic/context for the debate
         output_file: Optional file to save results
@@ -232,7 +229,7 @@ def classify_claim_pairs(model: ArgumentRelationModel, claims: List[Dict],
         List of relation classification results
     """
     # Generate all pairs within this debate
-    pairs = list(combinations(range(len(claims)), 2))
+    pairs = list(combinations(range(len(arguments)), 2))
     
     if max_pairs:
         pairs = pairs[:max_pairs]
@@ -240,32 +237,32 @@ def classify_claim_pairs(model: ArgumentRelationModel, claims: List[Dict],
     total_pairs = len(pairs)
     
     results = []
-    for idx1, idx2 in tqdm(pairs, desc="Classifying claim pairs"):
-        claim1 = claims[idx1]
-        claim2 = claims[idx2]
+    for idx1, idx2 in tqdm(pairs, desc="Classifying argument pairs"):
+        arg1 = arguments[idx1]
+        arg2 = arguments[idx2]
         
         try:
             relation = model.classify_relation(
-                source=claim1['claim_text'],
-                target=claim2['claim_text'],
+                source=arg1['argument_text'],
+                target=arg2['argument_text'],
                 topic=topic
             )
             
             result = {
-                'pair_id': f"{claim1['claim_id']}_vs_{claim2['claim_id']}",
-                'relation_type': 'claim_to_claim',
+                'pair_id': f"{arg1['argument_id']}_vs_{arg2['argument_id']}",
+                'relation_type': 'argument_to_argument',
                 'debate_id': debate_id,
-                'source_claim': {
-                    'claim_id': claim1['claim_id'],
-                    'claim_text': claim1['claim_text'],
-                    'intervention_id': claim1['intervention_id'],
-                    'speaker': claim1['speaker']
+                'source_argument': {
+                    'argument_id': arg1['argument_id'],
+                    'argument_text': arg1['argument_text'],
+                    'intervention_id': arg1['intervention_id'],
+                    'speaker': arg1['speaker']
                 },
-                'target_claim': {
-                    'claim_id': claim2['claim_id'],
-                    'claim_text': claim2['claim_text'],
-                    'intervention_id': claim2['intervention_id'],
-                    'speaker': claim2['speaker']
+                'target_argument': {
+                    'argument_id': arg2['argument_id'],
+                    'argument_text': arg2['argument_text'],
+                    'intervention_id': arg2['intervention_id'],
+                    'speaker': arg2['speaker']
                 },
                 'relation': relation,
                 'topic': topic
@@ -284,19 +281,19 @@ def classify_claim_pairs(model: ArgumentRelationModel, claims: List[Dict],
     return results
 
 
-def classify_claims_to_report_statements(model: ArgumentRelationModel, 
-                                        claims: List[Dict], 
+def classify_arguments_to_report_statements(model: ArgumentRelationModel, 
+                                        arguments: List[Dict], 
                                         report_statements: List[Dict],
                                         debate_id: str, 
                                         topic: str = "", 
                                         output_file: Optional[str] = None,
                                         max_pairs: Optional[int] = None) -> List[Dict]:
     """
-    Classify relations between mined claims and report statements.
+    Classify relations between mined arguments and report statements.
     
     Args:
         model: Loaded ArgumentRelationModel
-        claims: List of claim dictionaries (mined from interventions)
+        arguments: List of argument dictionaries (mined from interventions)
         report_statements: List of report statement dictionaries
         debate_id: ID of the debate
         topic: Topic/context for the debate
@@ -306,37 +303,37 @@ def classify_claims_to_report_statements(model: ArgumentRelationModel,
     Returns:
         List of relation classification results
     """
-    # Generate all pairs: each claim vs each report statement
+    # Generate all pairs: each argument vs each report statement
     pairs = []
-    for claim_idx in range(len(claims)):
+    for arg_idx in range(len(arguments)):
         for stmt_idx in range(len(report_statements)):
-            pairs.append((claim_idx, stmt_idx))
+            pairs.append((arg_idx, stmt_idx))
     
     if max_pairs:
         pairs = pairs[:max_pairs]
     
     results = []
-    for claim_idx, stmt_idx in tqdm(pairs, desc="Classifying claim-to-report-statement pairs"):
-        claim = claims[claim_idx]
+    for arg_idx, stmt_idx in tqdm(pairs, desc="Classifying argument-to-report-statement pairs"):
+        argument = arguments[arg_idx]
         statement = report_statements[stmt_idx]
         
         try:
-            # Classify relation: claim (source) vs report statement (target)
+            # Classify relation: argument (source) vs report statement (target)
             relation = model.classify_relation(
-                source=claim['claim_text'],
+                source=argument['argument_text'],
                 target=statement['statement_text'],
                 topic=topic
             )
             
             result = {
-                'pair_id': f"{claim['claim_id']}_vs_{statement['statement_id']}",
-                'relation_type': 'claim_to_report_statement',
+                'pair_id': f"{argument['argument_id']}_vs_{statement['statement_id']}",
+                'relation_type': 'argument_to_report_statement',
                 'debate_id': debate_id,
-                'claim': {
-                    'claim_id': claim['claim_id'],
-                    'claim_text': claim['claim_text'],
-                    'intervention_id': claim['intervention_id'],
-                    'speaker': claim['speaker']
+                'argument': {
+                    'argument_id': argument['argument_id'],
+                    'argument_text': argument['argument_text'],
+                    'intervention_id': argument['intervention_id'],
+                    'speaker': argument['speaker']
                 },
                 'report_statement': {
                     'statement_id': statement['statement_id'],
@@ -363,17 +360,17 @@ def classify_claims_to_report_statements(model: ArgumentRelationModel,
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Run Argument Relation Classification on extracted claims and report statements",
+        description="Run Argument Relation Classification on extracted arguments and report statements",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Classify relations for all claim pairs and claim-to-report-statement pairs
+  # Classify relations for all argument pairs and argument-to-report-statement pairs
   python run_arc_on_claims.py --input results/ --debates-dir data/debates --output results/arc_results.json
 
   # Limit to first 100 pairs for testing
   python run_arc_on_claims.py --input results/ --debates-dir data/debates --max-pairs 100 --output results/arc_test.json
 
-  # Skip claim-to-claim relations (only classify claim-to-report-statement)
+  # Skip argument-to-argument relations (only classify argument-to-report-statement)
   python run_arc_on_claims.py --input results/ --debates-dir data/debates --skip-claim-pairs --output results/arc_results.json
         """
     )
@@ -403,9 +400,9 @@ Examples:
     parser.add_argument('--max-pairs', type=int,
                       help='Maximum number of pairs to process per type (None = all)')
     parser.add_argument('--skip-claim-pairs', action='store_true',
-                      help='Skip claim-to-claim relation classification (only do claim-to-report-statement)')
+                      help='Skip argument-to-argument relation classification (only do argument-to-report-statement)')
     parser.add_argument('--skip-report-relations', action='store_true',
-                      help='Skip claim-to-report-statement relation classification (only do claim-to-claim)')
+                      help='Skip argument-to-report-statement relation classification (only do argument-to-argument)')
     
     args = parser.parse_args()
     
@@ -432,20 +429,20 @@ Examples:
         print("No extracted files found. Exiting.")
         sys.exit(1)
     
-    # Collect all claims grouped by debate
-    claims_by_debate = collect_all_claims(extracted_results)
+    # Collect all arguments grouped by debate
+    arguments_by_debate = collect_all_arguments(extracted_results)
     
-    # Filter debates with at least 1 claim (needed for report statement relations)
-    valid_debates = {debate_id: claims for debate_id, claims in claims_by_debate.items() 
-                     if len(claims) >= 1}
+    # Filter debates with at least 1 argument (needed for report statement relations)
+    valid_debates = {debate_id: arguments for debate_id, arguments in arguments_by_debate.items() 
+                     if len(arguments) >= 1}
     
     if not valid_debates:
-        print("No debates found with at least 1 claim. Exiting.")
+        print("No debates found with at least 1 argument. Exiting.")
         sys.exit(1)
     
-    # For claim-to-claim relations, need at least 2 claims
-    debates_with_multiple_claims = {debate_id: claims for debate_id, claims in valid_debates.items() 
-                                    if len(claims) >= 2}
+    # For argument-to-argument relations, need at least 2 arguments
+    debates_with_multiple_arguments = {debate_id: arguments for debate_id, arguments in valid_debates.items() 
+                                    if len(arguments) >= 2}
     
     # Load ARC model
     
@@ -469,17 +466,17 @@ Examples:
     import time
     total_start_time = time.time()
     all_results = {
-        'claim_to_claim': [],
-        'claim_to_report_statement': []
+        'argument_to_argument': [],
+        'argument_to_report_statement': []
     }
-    total_pairs = {'claim_to_claim': 0, 'claim_to_report_statement': 0}
+    total_pairs = {'argument_to_argument': 0, 'argument_to_report_statement': 0}
     
     try:
-        for debate_id, claims in tqdm(valid_debates.items(), desc="Processing debates"):
+        for debate_id, arguments in tqdm(valid_debates.items(), desc="Processing debates"):
             # Get topic for this debate
             topic = args.topic
-            if not topic and claims:
-                topic = claims[0].get('agenda_item', '')
+            if not topic and arguments:
+                topic = arguments[0].get('agenda_item', '')
             
             # Load report statements for this debate
             debate_dir = os.path.join(args.debates_dir, debate_id)
@@ -490,52 +487,52 @@ Examples:
             os.makedirs(debate_output_dir, exist_ok=True)
             
             debate_results = {
-                'claim_to_claim': [],
-                'claim_to_report_statement': []
+                'argument_to_argument': [],
+                'argument_to_report_statement': []
             }
             
-            # 1. Classify relations between claims and report statements
-            if not args.skip_report_relations and report_statements and claims:
-                claim_to_report_file = os.path.join(debate_output_dir, f"{debate_id}_claim_to_report.json")
+            # 1. Classify relations between arguments and report statements
+            if not args.skip_report_relations and report_statements and arguments:
+                argument_to_report_file = os.path.join(debate_output_dir, f"{debate_id}_argument_to_report.json")
                 
                 debate_max_pairs = None
                 if args.max_pairs:
                     debate_max_pairs = args.max_pairs
                 
-                claim_to_report_results = classify_claims_to_report_statements(
+                argument_to_report_results = classify_arguments_to_report_statements(
                     model,
-                    claims,
+                    arguments,
                     report_statements,
                     debate_id=debate_id,
                     topic=topic,
-                    output_file=claim_to_report_file,
+                    output_file=argument_to_report_file,
                     max_pairs=debate_max_pairs
                 )
                 
-                debate_results['claim_to_report_statement'] = claim_to_report_results
-                all_results['claim_to_report_statement'].extend(claim_to_report_results)
-                total_pairs['claim_to_report_statement'] += len(claim_to_report_results)
+                debate_results['argument_to_report_statement'] = argument_to_report_results
+                all_results['argument_to_report_statement'].extend(argument_to_report_results)
+                total_pairs['argument_to_report_statement'] += len(argument_to_report_results)
             
-            # 2. Classify relations between all pairs of claims
-            if not args.skip_claim_pairs and len(claims) >= 2:
-                claim_to_claim_file = os.path.join(debate_output_dir, f"{debate_id}_claim_to_claim.json")
+            # 2. Classify relations between all pairs of arguments
+            if not args.skip_claim_pairs and len(arguments) >= 2:
+                argument_to_argument_file = os.path.join(debate_output_dir, f"{debate_id}_argument_to_argument.json")
                 
                 debate_max_pairs = None
                 if args.max_pairs:
                     debate_max_pairs = args.max_pairs
                 
-                claim_to_claim_results = classify_claim_pairs(
+                argument_to_argument_results = classify_argument_pairs(
                     model,
-                    claims,
+                    arguments,
                     debate_id=debate_id,
                     topic=topic,
-                    output_file=claim_to_claim_file,
+                    output_file=argument_to_argument_file,
                     max_pairs=debate_max_pairs
                 )
                 
-                debate_results['claim_to_claim'] = claim_to_claim_results
-                all_results['claim_to_claim'].extend(claim_to_claim_results)
-                total_pairs['claim_to_claim'] += len(claim_to_claim_results)
+                debate_results['argument_to_argument'] = argument_to_argument_results
+                all_results['argument_to_argument'].extend(argument_to_argument_results)
+                total_pairs['argument_to_argument'] += len(argument_to_argument_results)
             
             # Save combined results for this debate
             combined_file = os.path.join(debate_output_dir, f"{debate_id}_arc_results.json")
