@@ -20,6 +20,7 @@ from typing import List, Dict, Tuple, Optional
 from itertools import combinations
 import platform
 import torch
+from tqdm import tqdm
 
 from src.argument_models import ArgumentRelationModel
 
@@ -239,7 +240,7 @@ def classify_claim_pairs(model: ArgumentRelationModel, claims: List[Dict],
     total_pairs = len(pairs)
     
     results = []
-    for idx1, idx2 in pairs:
+    for idx1, idx2 in tqdm(pairs, desc="Classifying claim pairs"):
         claim1 = claims[idx1]
         claim2 = claims[idx2]
         
@@ -315,7 +316,7 @@ def classify_claims_to_report_statements(model: ArgumentRelationModel,
         pairs = pairs[:max_pairs]
     
     results = []
-    for claim_idx, stmt_idx in pairs:
+    for claim_idx, stmt_idx in tqdm(pairs, desc="Classifying claim-to-report-statement pairs"):
         claim = claims[claim_idx]
         statement = report_statements[stmt_idx]
         
@@ -474,7 +475,7 @@ Examples:
     total_pairs = {'claim_to_claim': 0, 'claim_to_report_statement': 0}
     
     try:
-        for debate_id, claims in valid_debates.items():
+        for debate_id, claims in tqdm(valid_debates.items(), desc="Processing debates"):
             # Get topic for this debate
             topic = args.topic
             if not topic and claims:

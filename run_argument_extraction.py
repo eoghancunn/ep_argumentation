@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import List, Dict, Optional
 import platform
 import torch
+from tqdm import tqdm
 
 from src.argument_models import ArgumentMiningModel, ArgumentMiningModelAPI, load_intervention
 
@@ -171,7 +172,7 @@ def extract_from_debate(model: ArgumentMiningModel, debate_dir: str,
     # Count president interventions to skip
     president_count = 0
     results = []
-    for intervention_file in intervention_files:
+    for intervention_file in tqdm(intervention_files, desc="Processing interventions"):
         file_path = os.path.join(interventions_dir, intervention_file)
         
         # Check if this is a president intervention before processing
