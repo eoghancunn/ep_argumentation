@@ -313,9 +313,11 @@ def classify_argument_pairs(model: ArgumentRelationModel, arguments: List[Dict],
             if isinstance(relation_result, dict):
                 relation = relation_result.get('relation', '')
                 reasoning = relation_result.get('reasoning')
+                raw_output = relation_result.get('raw_output')
             else:
                 relation = relation_result
                 reasoning = None
+                raw_output = None
             
             result = {
                 'pair_id': f"{arg1['argument_id']}_vs_{arg2['argument_id']}",
@@ -335,6 +337,7 @@ def classify_argument_pairs(model: ArgumentRelationModel, arguments: List[Dict],
                 },
                 'relation': relation,
                 'reasoning': reasoning,
+                'raw_output': raw_output,
                 'topic': topic
             }
             
@@ -402,9 +405,11 @@ def classify_arguments_to_report_statements(model: ArgumentRelationModel,
             if isinstance(relation_result, dict):
                 relation = relation_result.get('relation', '')
                 reasoning = relation_result.get('reasoning')
+                raw_output = relation_result.get('raw_output')
             else:
                 relation = relation_result
                 reasoning = None
+                raw_output = None
             
             result = {
                 'pair_id': f"{argument['argument_id']}_vs_{statement['statement_id']}",
@@ -424,6 +429,7 @@ def classify_arguments_to_report_statements(model: ArgumentRelationModel,
                 },
                 'relation': relation,
                 'reasoning': reasoning,
+                'raw_output': raw_output,
                 'topic': topic
             }
             

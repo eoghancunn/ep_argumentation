@@ -435,7 +435,7 @@ class ArgumentRelationModel:
         if not relation:
             relation = generated_text.strip()
         
-        return {'relation': relation, 'reasoning': None}
+        return {'relation': relation, 'reasoning': None, 'raw_output': None}
 
 
 class ArgumentRelationModelOllama:
@@ -506,8 +506,9 @@ class ArgumentRelationModelOllama:
             max_new_tokens: Maximum number of tokens to generate
             
         Returns:
-            Dictionary with 'relation' (predicted relation type) and 'reasoning' 
-            (extracted from <think> tags if present, None otherwise)
+            Dictionary with 'relation' (predicted relation type), 'reasoning' 
+            (extracted from <think> tags if present, None otherwise), and 'raw_output' 
+            (complete unprocessed response from Ollama)
         """
         if relations is None:
             relations = ['no relation', 'attack', 'support']
@@ -547,6 +548,9 @@ class ArgumentRelationModelOllama:
             message = result.get('message', {})
             generated_text = message.get('content', '').strip()
             
+            # Store raw output before any processing
+            raw_output = generated_text
+            
             # Extract reasoning from <think> tags if present
             reasoning = None
             if "<think>" in generated_text and "</think>" in generated_text:
@@ -575,7 +579,7 @@ class ArgumentRelationModelOllama:
             if not relation:
                 relation = generated_text.strip()
             
-            return {'relation': relation, 'reasoning': reasoning}
+            return {'relation': relation, 'reasoning': reasoning, 'raw_output': raw_output}
             
         except requests.exceptions.RequestException as e:
             print(f"Error calling Ollama API: {e}")
