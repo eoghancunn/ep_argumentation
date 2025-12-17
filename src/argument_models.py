@@ -536,7 +536,8 @@ class ArgumentRelationModelOllama:
             "options": {
                 "temperature": self.temperature,
                 "num_predict": max_new_tokens,
-                "min_p": self.min_p
+                "min_p": self.min_p,
+                "num_ctx": 2048
             }
         }
         
@@ -552,15 +553,27 @@ class ArgumentRelationModelOllama:
             raw_output = generated_text
             
             # Extract reasoning from <think> tags if present
+            # Handle both cases: with opening tag and without opening tag
             reasoning = None
-            if "<think>" in generated_text and "</think>" in generated_text:
-                reasoning_match = re.search(r'<think>(.*?)</think>', 
-                                           generated_text, re.DOTALL)
-                if reasoning_match:
-                    reasoning = reasoning_match.group(1).strip()
-                    # Remove reasoning from generated_text to get the actual response
-                    generated_text = re.sub(r'<think>.*?</think>', '', 
-                                          generated_text, flags=re.DOTALL).strip()
+            if "</think>" in generated_text:
+                # First try to match with opening tag
+                if "<think>" in generated_text:
+                    reasoning_match = re.search(r'<think>(.*?)</think>', 
+                                               generated_text, re.DOTALL)
+                    if reasoning_match:
+                        reasoning = reasoning_match.group(1).strip()
+                        # Remove reasoning from generated_text to get the actual response
+                        generated_text = re.sub(r'<think>.*?</think>', '', 
+                                              generated_text, flags=re.DOTALL).strip()
+                else:
+                    # No opening tag - extract everything before the closing tag
+                    reasoning_match = re.search(r'(.*?)</think>', 
+                                               generated_text, re.DOTALL)
+                    if reasoning_match:
+                        reasoning = reasoning_match.group(1).strip()
+                        # Remove reasoning from generated_text to get the actual response
+                        generated_text = re.sub(r'.*?</think>', '', 
+                                              generated_text, flags=re.DOTALL).strip()
             
             # Extract answer from <|ANSWER|> tags (same as ArgumentRelationModel)
             relation = None
