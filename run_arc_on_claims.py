@@ -241,6 +241,10 @@ def classify_argument_pairs(model: ArgumentRelationModel, arguments: List[Dict],
         arg1 = arguments[idx1]
         arg2 = arguments[idx2]
         
+        # Skip pairs from the same speaker
+        if arg1['speaker'] == arg2['speaker']:
+            continue
+        
         try:
             relation = model.classify_relation(
                 source=arg1['argument_text'],
