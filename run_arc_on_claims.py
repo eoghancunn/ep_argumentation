@@ -155,7 +155,7 @@ def load_report_statements(debate_dir: str) -> List[Dict]:
                     if paragraph and paragraph.strip():
                         all_statements.append({
                             'statement_id': f"{report_id}_para_{i+1}",
-                            'statement_text': "The European Parliament " + paragraph.strip(),
+                            'statement_text': "The European Parliament " + re.sub(r'^[^a-zA-Z]*', '', paragraph.strip()),
                             'report_id': report_id,
                             'paragraph_index': i + 1
                         })
