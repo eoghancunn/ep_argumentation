@@ -12,6 +12,7 @@ from typing import Optional, Dict, List, Tuple
 import json
 import os
 import platform
+import re
 
 try:
     from gradio_client import Client
@@ -349,7 +350,7 @@ class ArgumentRelationModel:
         print("Argument relation model loaded successfully!")
     
     def classify_relation(self, source: str, target: str, topic: str = "",
-                         relations: List[str] = None, max_new_tokens: int = 128) -> str:
+                         relations: List[str] = None, max_new_tokens: int = 128) -> Dict[str, Optional[str]]:
         """
         Classify the relation between source and target arguments.
         
@@ -361,7 +362,7 @@ class ArgumentRelationModel:
             max_new_tokens: Maximum number of tokens to generate
             
         Returns:
-            Predicted relation type
+            Dictionary with 'relation' (predicted relation type) and 'reasoning' (None for this model)
         """
         if relations is None:
             relations = ['no relation', 'attack', 'support']
@@ -418,6 +419,7 @@ class ArgumentRelationModel:
         generated_text = self.tokenizer.decode(outputs[0][input_length:], skip_special_tokens=True)
         
         # Extract answer from <|ANSWER|> tags
+        relation = None
         if "<|ANSWER|>" in generated_text:
             parts = generated_text.split("<|ANSWER|>")
             if len(parts) >= 2:
@@ -427,10 +429,13 @@ class ArgumentRelationModel:
                 # Clean up any remaining whitespace or newlines
                 answer = answer.strip()
                 if answer:
-                    return answer
+                    relation = answer
         
-        # If no answer found in tags, return the generated text (might be the answer itself)
-        return generated_text.strip()
+        # If no answer found in tags, use the generated text (might be the answer itself)
+        if not relation:
+            relation = generated_text.strip()
+        
+        return {'relation': relation, 'reasoning': None}
 
 
 class ArgumentRelationModelOllama:
@@ -489,7 +494,7 @@ class ArgumentRelationModelOllama:
             print(f"Make sure Ollama is running: ollama serve")
     
     def classify_relation(self, source: str, target: str, topic: str = "",
-                         relations: List[str] = None, max_new_tokens: int = 128) -> str:
+                         relations: List[str] = None, max_new_tokens: int = 128) -> Dict[str, Optional[str]]:
         """
         Classify the relation between source and target arguments using Ollama.
         
@@ -501,7 +506,8 @@ class ArgumentRelationModelOllama:
             max_new_tokens: Maximum number of tokens to generate
             
         Returns:
-            Predicted relation type
+            Dictionary with 'relation' (predicted relation type) and 'reasoning' 
+            (extracted from <think> tags if present, None otherwise)
         """
         if relations is None:
             relations = ['no relation', 'attack', 'support']
@@ -541,7 +547,19 @@ class ArgumentRelationModelOllama:
             message = result.get('message', {})
             generated_text = message.get('content', '').strip()
             
+            # Extract reasoning from <think> tags if present
+            reasoning = None
+            if "<think>" in generated_text and "</think>" in generated_text:
+                reasoning_match = re.search(r'<think>(.*?)</think>', 
+                                           generated_text, re.DOTALL)
+                if reasoning_match:
+                    reasoning = reasoning_match.group(1).strip()
+                    # Remove reasoning from generated_text to get the actual response
+                    generated_text = re.sub(r'<think>.*?</think>', '', 
+                                          generated_text, flags=re.DOTALL).strip()
+            
             # Extract answer from <|ANSWER|> tags (same as ArgumentRelationModel)
+            relation = None
             if "<|ANSWER|>" in generated_text:
                 parts = generated_text.split("<|ANSWER|>")
                 if len(parts) >= 2:
@@ -551,10 +569,13 @@ class ArgumentRelationModelOllama:
                     # Clean up any remaining whitespace or newlines
                     answer = answer.strip()
                     if answer:
-                        return answer
+                        relation = answer
             
-            # If no answer found in tags, return the generated text (might be the answer itself)
-            return generated_text.strip()
+            # If no answer found in tags, use the generated text (might be the answer itself)
+            if not relation:
+                relation = generated_text.strip()
+            
+            return {'relation': relation, 'reasoning': reasoning}
             
         except requests.exceptions.RequestException as e:
             print(f"Error calling Ollama API: {e}")
