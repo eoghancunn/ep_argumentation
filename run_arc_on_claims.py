@@ -155,7 +155,7 @@ def load_report_statements(debate_dir: str) -> List[Dict]:
                     if paragraph and paragraph.strip():
                         all_statements.append({
                             'statement_id': f"{report_id}_para_{i+1}",
-                            'statement_text': "The European Parliament " + paragraph.strip(),
+                            'statement_text': "The European Parliament " + re.sub(r'^[^a-zA-Z]*', '', paragraph.strip()),
                             'report_id': report_id,
                             'paragraph_index': i + 1
                         })
@@ -211,11 +211,55 @@ def collect_all_arguments(extracted_results: List[Dict]) -> Dict[str, List[Dict]
     return arguments_by_debate
 
 
+def parse_intervention_id(intervention_id: str) -> Tuple[int, int]:
+    """
+    Parse intervention ID to extract chronological ordering.
+    
+    Args:
+        intervention_id: Intervention ID like "2-019" or "3-360"
+        
+    Returns:
+        Tuple of (section_number, sequence_number) for comparison
+    """
+    parts = intervention_id.split('-')
+    if len(parts) == 2:
+        try:
+            section = int(parts[0])
+            sequence = int(parts[1])
+            return (section, sequence)
+        except ValueError:
+            return (0, 0)
+    return (0, 0)
+
+
+def compare_intervention_ids(id1: str, id2: str) -> int:
+    """
+    Compare two intervention IDs chronologically.
+    
+    Args:
+        id1: First intervention ID
+        id2: Second intervention ID
+        
+    Returns:
+        -1 if id1 < id2, 0 if id1 == id2, 1 if id1 > id2
+    """
+    parsed1 = parse_intervention_id(id1)
+    parsed2 = parse_intervention_id(id2)
+    
+    if parsed1 < parsed2:
+        return -1
+    elif parsed1 > parsed2:
+        return 1
+    else:
+        return 0
+
+
 def classify_argument_pairs(model: ArgumentRelationModel, arguments: List[Dict], 
                         debate_id: str, topic: str = "", output_file: Optional[str] = None,
                         max_pairs: Optional[int] = None) -> List[Dict]:
     """
     Classify relations between all pairs of arguments within the same debate.
+    Only compares arguments chronologically (source must come after target).
     
     Args:
         model: Loaded ArgumentRelationModel
@@ -231,13 +275,9 @@ def classify_argument_pairs(model: ArgumentRelationModel, arguments: List[Dict],
     # Generate all pairs within this debate
     pairs = list(combinations(range(len(arguments)), 2))
     
-    if max_pairs:
-        pairs = pairs[:max_pairs]
-    
-    total_pairs = len(pairs)
-    
-    results = []
-    for idx1, idx2 in tqdm(pairs, desc="Classifying argument pairs"):
+    # Filter pairs: only keep where source comes after target chronologically
+    filtered_pairs = []
+    for idx1, idx2 in pairs:
         arg1 = arguments[idx1]
         arg2 = arguments[idx2]
         
@@ -245,12 +285,35 @@ def classify_argument_pairs(model: ArgumentRelationModel, arguments: List[Dict],
         if arg1['speaker'] == arg2['speaker']:
             continue
         
+        # Only keep pairs where source (arg1) comes after target (arg2) chronologically
+        source_intervention_id = arg1.get('intervention_id', '')
+        target_intervention_id = arg2.get('intervention_id', '')
+        
+        if compare_intervention_ids(source_intervention_id, target_intervention_id) > 0:
+            filtered_pairs.append((idx1, idx2))
+    
+    if max_pairs:
+        filtered_pairs = filtered_pairs[:max_pairs]
+    
+    results = []
+    for idx1, idx2 in tqdm(filtered_pairs, desc="Classifying argument pairs"):
+        arg1 = arguments[idx1]
+        arg2 = arguments[idx2]
+        
         try:
-            relation = model.classify_relation(
+            relation_result = model.classify_relation(
                 source=arg1['argument_text'],
                 target=arg2['argument_text'],
                 topic=topic
             )
+            
+            # Handle both dict and string returns for backward compatibility
+            if isinstance(relation_result, dict):
+                relation = relation_result.get('relation', '')
+                reasoning = relation_result.get('reasoning')
+            else:
+                relation = relation_result
+                reasoning = None
             
             result = {
                 'pair_id': f"{arg1['argument_id']}_vs_{arg2['argument_id']}",
@@ -269,6 +332,7 @@ def classify_argument_pairs(model: ArgumentRelationModel, arguments: List[Dict],
                     'speaker': arg2['speaker']
                 },
                 'relation': relation,
+                'reasoning': reasoning,
                 'topic': topic
             }
             
@@ -323,11 +387,19 @@ def classify_arguments_to_report_statements(model: ArgumentRelationModel,
         
         try:
             # Classify relation: argument (source) vs report statement (target)
-            relation = model.classify_relation(
+            relation_result = model.classify_relation(
                 source=argument['argument_text'],
                 target=statement['statement_text'],
                 topic=topic
             )
+            
+            # Handle both dict and string returns for backward compatibility
+            if isinstance(relation_result, dict):
+                relation = relation_result.get('relation', '')
+                reasoning = relation_result.get('reasoning')
+            else:
+                relation = relation_result
+                reasoning = None
             
             result = {
                 'pair_id': f"{argument['argument_id']}_vs_{statement['statement_id']}",
@@ -346,6 +418,7 @@ def classify_arguments_to_report_statements(model: ArgumentRelationModel,
                     'paragraph_index': statement['paragraph_index']
                 },
                 'relation': relation,
+                'reasoning': reasoning,
                 'topic': topic
             }
             
