@@ -447,7 +447,7 @@ class ArgumentRelationModelOllama:
         
         Args:
             model_name: Ollama model name (default: "llama3.1")
-            base_url: Ollama API base URL (default: from OLLAMA_URL env var or "http://localhost:11434")
+            base_url: Ollama API base URL (default: from OLLAMA_URL env var or "http://localhost:11435")
         """
         if not REQUESTS_AVAILABLE:
             raise ImportError(
@@ -459,7 +459,7 @@ class ArgumentRelationModelOllama:
         if base_url is None:
             base_url = os.getenv('OLLAMA_URL', 'http://localhost:11435')
         self.base_url = base_url.rstrip('/')
-        self.api_url = f"{self.base_url}/api/chat"
+        self.api_url = f"{self.base_url}/api/generate"
         
         # System prompt as specified in the model card (same as ArgumentRelationModel)
         self.system_prompt = (
@@ -524,13 +524,13 @@ class ArgumentRelationModelOllama:
             f"[TARGET]: {target}\n"
         )
         
-        # Prepare request payload using chat API format
+        # Combine system prompt and user content for generate API
+        prompt = f"{self.system_prompt}\n\n{user_content}"
+        
+        # Prepare request payload using generate API format
         payload = {
             "model": self.model_name,
-            "messages": [
-                {"role": "system", "content": self.system_prompt},
-                {"role": "user", "content": user_content}
-            ],
+            "prompt": prompt,
             "stream": False,
             "options": {
                 "temperature": self.temperature,
@@ -544,9 +544,8 @@ class ArgumentRelationModelOllama:
             response.raise_for_status()
             
             result = response.json()
-            # Chat API returns message object
-            message = result.get('message', {})
-            generated_text = message.get('content', '').strip()
+            # Generate API returns response directly
+            generated_text = result.get('response', '').strip()
             
             # Store raw output before any processing
             raw_output = generated_text

@@ -482,7 +482,7 @@ Examples:
     parser.add_argument('--ollama-model', type=str, default='llama3.1',
                       help='Ollama model name (default: llama3.1, only used with --use-ollama)')
     parser.add_argument('--ollama-url', type=str, default=None,
-                      help='Ollama API URL (default: from OLLAMA_URL env var or http://localhost:11434, only used with --use-ollama)')
+                      help='Ollama API URL (default: from OLLAMA_URL env var or http://localhost:11435, only used with --use-ollama)')
     parser.add_argument('--model', type=str,
                       default='brunoyun/Llama-3.1-Amelia-AR-8B-v1',
                       help='Model name (default: brunoyun/Llama-3.1-Amelia-AR-8B-v1, ignored if --use-ollama)')
