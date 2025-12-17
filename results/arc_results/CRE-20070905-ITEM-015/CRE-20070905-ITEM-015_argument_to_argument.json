@@ -1,1 +1,202 @@
-[]
+[
+  {
+    "pair_id": "3-361_arg_1_vs_3-360_arg_1",
+    "relation_type": "argument_to_argument",
+    "debate_id": "CRE-20070905-ITEM-015",
+    "source_argument": {
+      "argument_id": "3-361_arg_1",
+      "argument_text": "The Commission will only prepare MSY plans on a regional basis and only after a detailed consultation with the sectors involved. The region advisory councils will play an important role here and their work has already begun.",
+      "intervention_id": "3-361",
+      "speaker": "Joe Borg,"
+    },
+    "target_argument": {
+      "argument_id": "3-360_arg_1",
+      "argument_text": "Carmen Fraga Estévez (PPE-DE), rapporteur. – (ES) Madam President, allow me to say, first of all, that today a Spanish fishing boat sunk off the Andalusian coast and as a result three people died and five are currently missing. I ask Parliament to stand with the families in their sorrow and the desire for the missing sailors to be rescued.",
+      "intervention_id": "3-360",
+      "speaker": "Carmen Fraga Estévez (PPE-DE),"
+    },
+    "relation": "Okay, let's tackle this problem. So, I need to figure out the relation between the SOURCE and the TARGET based on the given topic. The possible relations are 'no relation', 'attack', or 'support'. The topic is about sustainability in EU fisheries through maximum sustainable yield (MSY).\n\nFirst, I'll look at the SOURCE. It talks about the Commission preparing MSY plans regionally after consulting sectors, and regional advisory councils being important. This is about implementing sustainable fishing practices through a structured process.\n\nNow, the TARGET is a statement by Carmen Fraga Estévez, the rapporteur. She mentions a Spanish fishing boat",
+    "reasoning": null,
+    "topic": "Sustainability in EU fisheries through maximum sustainable yield (debate)"
+  },
+  {
+    "pair_id": "3-361_arg_1_vs_3-360_arg_2",
+    "relation_type": "argument_to_argument",
+    "debate_id": "CRE-20070905-ITEM-015",
+    "source_argument": {
+      "argument_id": "3-361_arg_1",
+      "argument_text": "The Commission will only prepare MSY plans on a regional basis and only after a detailed consultation with the sectors involved. The region advisory councils will play an important role here and their work has already begun.",
+      "intervention_id": "3-361",
+      "speaker": "Joe Borg,"
+    },
+    "target_argument": {
+      "argument_id": "3-360_arg_2",
+      "argument_text": "The first thing that I would like to point out, as the Commission itself recognises and Parliament has stated on numerous occasions, is the clear failure of the Community fisheries management system, which over the many years it has been in existence has not ensured the sustainability of resources, and has done even less to support an efficient and profitable fisheries sector.",
+      "intervention_id": "3-360",
+      "speaker": "Carmen Fraga Estévez (PPE-DE),"
+    },
+    "relation": "We are given:\n- [RELATION]: {'no relation', 'attack', 'support'}\n- [TOPIC]: Sustainability in EU fisheries through maximum sustainable yield (debate)\n- [SOURCE]: The Commission will only prepare MSY plans on a regional basis and only after a detailed consultation with the sectors involved. The region advisory councils will play an important role here and their work has already begun.\n- [TARGET]: The first thing that I would like to point out, as the Commission itself recognises and Parliament has stated on numerous occasions, is the clear failure of the Community fisheries management system, which over the many years it has been",
+    "reasoning": null,
+    "topic": "Sustainability in EU fisheries through maximum sustainable yield (debate)"
+  },
+  {
+    "pair_id": "3-361_arg_1_vs_3-360_arg_3",
+    "relation_type": "argument_to_argument",
+    "debate_id": "CRE-20070905-ITEM-015",
+    "source_argument": {
+      "argument_id": "3-361_arg_1",
+      "argument_text": "The Commission will only prepare MSY plans on a regional basis and only after a detailed consultation with the sectors involved. The region advisory councils will play an important role here and their work has already begun.",
+      "intervention_id": "3-361",
+      "speaker": "Joe Borg,"
+    },
+    "target_argument": {
+      "argument_id": "3-360_arg_3",
+      "argument_text": "This is the context in which we have received the Commission communication, which opts for maximum sustainable yield as the yardstick for long-term fishing activities, a theoretical model that seeks to combine the most efficient exploitation of a species with guaranteeing biological sustainability.",
+      "intervention_id": "3-360",
+      "speaker": "Carmen Fraga Estévez (PPE-DE),"
+    },
+    "relation": "We are given:\n- [RELATION] set: {'no relation', 'attack', 'support'}\n- [TOPIC]: Sustainability in EU fisheries through maximum sustainable yield (debate)\n- [SOURCE]: The Commission will only prepare MSY plans on a regional basis and only after a detailed consultation with the sectors involved. The region advisory councils will play an important role here and their work has already begun.\n- [TARGET]: This is the context in which we have received the Commission communication, which opts for maximum sustainable yield as the yardstick for long-term fishing activities, a theoretical model that seeks to combine the most efficient exploitation of a",
+    "reasoning": null,
+    "topic": "Sustainability in EU fisheries through maximum sustainable yield (debate)"
+  },
+  {
+    "pair_id": "3-361_arg_1_vs_3-360_arg_4",
+    "relation_type": "argument_to_argument",
+    "debate_id": "CRE-20070905-ITEM-015",
+    "source_argument": {
+      "argument_id": "3-361_arg_1",
+      "argument_text": "The Commission will only prepare MSY plans on a regional basis and only after a detailed consultation with the sectors involved. The region advisory councils will play an important role here and their work has already begun.",
+      "intervention_id": "3-361",
+      "speaker": "Joe Borg,"
+    },
+    "target_argument": {
+      "argument_id": "3-360_arg_4",
+      "argument_text": "The problem is that maximum sustainable yield, which, as an intellectual and theoretical concept may be irreproachable, has been found to have more than a few contradictions in its practical application, and, in fact, a large proportion of the scientific community now considers it to have been largely superseded.",
+      "intervention_id": "3-360",
+      "speaker": "Carmen Fraga Estévez (PPE-DE),"
+    },
+    "relation": "Okay, let's break this down. So, I need to figure out the relation between the SOURCE and TARGET given the context of sustainability in EU fisheries and the Maximum Sustainable Yield (MSY) debate. The possible relations are 'no relation', 'attack', or 'support'.\n\nFirst, I'll read both statements carefully. The SOURCE talks about the Commission preparing MSY plans regionally after consulting sectors, mentioning regional advisory councils. It seems positive, talking about how they're implementing MSY plans step by step.\n\nThe TARGET states that MSY, while theoretically good, has contradictions in practice and is considered outdated by many scientists. So it",
+    "reasoning": null,
+    "topic": "Sustainability in EU fisheries through maximum sustainable yield (debate)"
+  },
+  {
+    "pair_id": "3-361_arg_1_vs_3-360_arg_5",
+    "relation_type": "argument_to_argument",
+    "debate_id": "CRE-20070905-ITEM-015",
+    "source_argument": {
+      "argument_id": "3-361_arg_1",
+      "argument_text": "The Commission will only prepare MSY plans on a regional basis and only after a detailed consultation with the sectors involved. The region advisory councils will play an important role here and their work has already begun.",
+      "intervention_id": "3-361",
+      "speaker": "Joe Borg,"
+    },
+    "target_argument": {
+      "argument_id": "3-360_arg_5",
+      "argument_text": "The issue is therefore one of redefining the model in such a way that it can be adapted to the reality of fishing communities, This is where a series of questions arise as to how to do this, which the report that we are presenting today has sought to highlight, and which are not in any way answered in the Commission communication, which is very ambiguous and vague.",
+      "intervention_id": "3-360",
+      "speaker": "Carmen Fraga Estévez (PPE-DE),"
+    },
+    "relation": "Okay, let's try to figure out the relation between the SOURCE and TARGET. So, the topic is about Sustainability in EU fisheries through Maximum Sustainable Yield (MSY), specifically a debate.\n\nFirst, I need to understand what each part says. The SOURCE is about the Commission preparing MSY plans regionally after consulting with sectors, and regional advisory councils are involved. It sounds like they're saying the Commission is taking a structured, consultative approach.\n\nThen the TARGET says the issue is redefining the model to fit fishing communities' reality, and points out that the Commission's communication is ambiguous and vague, not answering the questions raised in",
+    "reasoning": null,
+    "topic": "Sustainability in EU fisheries through maximum sustainable yield (debate)"
+  },
+  {
+    "pair_id": "3-361_arg_1_vs_3-360_arg_6",
+    "relation_type": "argument_to_argument",
+    "debate_id": "CRE-20070905-ITEM-015",
+    "source_argument": {
+      "argument_id": "3-361_arg_1",
+      "argument_text": "The Commission will only prepare MSY plans on a regional basis and only after a detailed consultation with the sectors involved. The region advisory councils will play an important role here and their work has already begun.",
+      "intervention_id": "3-361",
+      "speaker": "Joe Borg,"
+    },
+    "target_argument": {
+      "argument_id": "3-360_arg_6",
+      "argument_text": "Among these, we know that maximum sustainable yield requires long series of reliable, accurate scientific data, while for the vast majority of species, it is not possible to have this degree of certainty.",
+      "intervention_id": "3-360",
+      "speaker": "Carmen Fraga Estévez (PPE-DE),"
+    },
+    "relation": "We are given:\n- RELATION set: {'no relation', 'attack', 'support'}\n- TOPIC: Sustainability in EU fisheries through maximum sustainable yield (debate)\n- SOURCE: The Commission will only prepare MSY plans on a regional basis and only after a detailed consultation with the sectors involved. The region advisory councils will play an important role here and their work has already begun.\n- TARGET: Among these, we know that maximum sustainable yield requires long series of reliable, accurate scientific data, while for the vast majority of species, it is not possible to have this degree of certainty.\n\nWe need to determine the relation between SOURCE and",
+    "reasoning": null,
+    "topic": "Sustainability in EU fisheries through maximum sustainable yield (debate)"
+  },
+  {
+    "pair_id": "3-361_arg_1_vs_3-360_arg_7",
+    "relation_type": "argument_to_argument",
+    "debate_id": "CRE-20070905-ITEM-015",
+    "source_argument": {
+      "argument_id": "3-361_arg_1",
+      "argument_text": "The Commission will only prepare MSY plans on a regional basis and only after a detailed consultation with the sectors involved. The region advisory councils will play an important role here and their work has already begun.",
+      "intervention_id": "3-361",
+      "speaker": "Joe Borg,"
+    },
+    "target_argument": {
+      "argument_id": "3-360_arg_7",
+      "argument_text": "Secondly, the model was created based on the exploitation of a single population, while the large majority of Community fisheries are multi-species, which means over- or under-fishing many of them, which is obviously contrary to the actual definition of maximum sustainable yield.",
+      "intervention_id": "3-360",
+      "speaker": "Carmen Fraga Estévez (PPE-DE),"
+    },
+    "relation": "We are given:\n- Relation types: {'no relation', 'attack', 'support'}\n- Topic: Sustainability in EU fisheries through maximum sustainable yield (debate)\n- Source: The Commission will only prepare MSY plans on a regional basis and only after a detailed consultation with the sectors involved. The region advisory councils will play an important role here and their work has already begun.\n- Target: Secondly, the model was created based on the exploitation of a single population, while the large majority of Community fisheries are multi-species, which means over- or under-fishing many of them, which is obviously contrary to the actual definition of maximum",
+    "reasoning": null,
+    "topic": "Sustainability in EU fisheries through maximum sustainable yield (debate)"
+  },
+  {
+    "pair_id": "3-361_arg_1_vs_3-360_arg_8",
+    "relation_type": "argument_to_argument",
+    "debate_id": "CRE-20070905-ITEM-015",
+    "source_argument": {
+      "argument_id": "3-361_arg_1",
+      "argument_text": "The Commission will only prepare MSY plans on a regional basis and only after a detailed consultation with the sectors involved. The region advisory councils will play an important role here and their work has already begun.",
+      "intervention_id": "3-361",
+      "speaker": "Joe Borg,"
+    },
+    "target_argument": {
+      "argument_id": "3-360_arg_8",
+      "argument_text": "It is clear that here we are not criticising the Commission’s intention to impose a new management model, but its inability to explain to us how it is going to overcome the difficulties of putting it into practice and avoid the pitfalls that exist in the actual formulation of maximum sustainable yield.",
+      "intervention_id": "3-360",
+      "speaker": "Carmen Fraga Estévez (PPE-DE),"
+    },
+    "relation": "We are given:\n  RELATION: {'no relation', 'attack', 'support'}\n  TOPIC: Sustainability in EU fisheries through maximum sustainable yield (debate)\n  SOURCE: \"The Commission will only prepare MSY plans on a regional basis and only after a detailed consultation with the sectors involved. The region advisory councils will play an important role here and their work has already begun.\"\n  TARGET: \"It is clear that here we are not criticising the Commission’s intention to impose a new management model, but its inability to explain to us how it is going to overcome the difficulties of putting it into practice and avoid the pitfalls that",
+    "reasoning": null,
+    "topic": "Sustainability in EU fisheries through maximum sustainable yield (debate)"
+  },
+  {
+    "pair_id": "3-361_arg_1_vs_3-360_arg_9",
+    "relation_type": "argument_to_argument",
+    "debate_id": "CRE-20070905-ITEM-015",
+    "source_argument": {
+      "argument_id": "3-361_arg_1",
+      "argument_text": "The Commission will only prepare MSY plans on a regional basis and only after a detailed consultation with the sectors involved. The region advisory councils will play an important role here and their work has already begun.",
+      "intervention_id": "3-361",
+      "speaker": "Joe Borg,"
+    },
+    "target_argument": {
+      "argument_id": "3-360_arg_9",
+      "argument_text": "First, the strict application of maximum sustainable yield will, in the short term, result in a sometimes drastic reduction in fishing opportunities, and therefore in the activity, income and employment of the Community fleet.",
+      "intervention_id": "3-360",
+      "speaker": "Carmen Fraga Estévez (PPE-DE),"
+    },
+    "relation": "Okay, let's tackle this problem. So, I need to figure out the relation between the SOURCE and TARGET based on the given topic. The possible relations are 'no relation', 'attack', or 'support'. \n\nFirst, let me understand the context. The topic is about sustainability in EU fisheries through Maximum Sustainable Yield (MSY), which is a debate. \n\nLooking at the SOURCE: It says the Commission will prepare MSY plans regionally after consulting sectors, and regional advisory councils are involved. This seems like a positive step or a procedural detail about how MSY is being implemented. \n\nNow the TARGET: It states that applying",
+    "reasoning": null,
+    "topic": "Sustainability in EU fisheries through maximum sustainable yield (debate)"
+  },
+  {
+    "pair_id": "3-361_arg_1_vs_3-360_arg_10",
+    "relation_type": "argument_to_argument",
+    "debate_id": "CRE-20070905-ITEM-015",
+    "source_argument": {
+      "argument_id": "3-361_arg_1",
+      "argument_text": "The Commission will only prepare MSY plans on a regional basis and only after a detailed consultation with the sectors involved. The region advisory councils will play an important role here and their work has already begun.",
+      "intervention_id": "3-361",
+      "speaker": "Joe Borg,"
+    },
+    "target_argument": {
+      "argument_id": "3-360_arg_10",
+      "argument_text": "Madam President, allow me to thank all my colleagues for their contributions and to request the adoption of a report by means of which the Committee on Fisheries wishes to call on the European Commission first to clear up all these uncertainties before forcing the introduction of a type of model for some species of great economic importance whose effectiveness is, for many fisheries, scientifically and economically questionable.",
+      "intervention_id": "3-360",
+      "speaker": "Carmen Fraga Estévez (PPE-DE),"
+    },
+    "relation": "We are given:\n  [RELATION]: {'no relation', 'attack', 'support'}\n  [TOPIC]: Sustainability in EU fisheries through maximum sustainable yield (debate)\n  [SOURCE]: The Commission will only prepare MSY plans on a regional basis and only after a detailed consultation with the sectors involved. The region advisory councils will play an important role here and their work has already begun.\n  [TARGET]: Madam President, allow me to thank all my colleagues for their contributions and to request the adoption of a report by means of which the Committee on Fisheries wishes to call on the European Commission first to clear up all these uncertainties",
+    "reasoning": null,
+    "topic": "Sustainability in EU fisheries through maximum sustainable yield (debate)"
+  }
+]

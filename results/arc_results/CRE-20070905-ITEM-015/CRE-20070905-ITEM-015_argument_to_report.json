@@ -11,11 +11,12 @@
     },
     "report_statement": {
       "statement_id": "A-6-2007-0298_para_1",
-      "statement_text": "The European Parliament 1.  Welcomes the Commission's communication with the greatest interest, notably its recognition that the existing fisheries management policy has failed and its objective of creating a new management model making it possible to ensure stock recovery, adapt the fishing effort to fisheries' real circumstances, and improve the reliability and stability of the fishing fleet;",
+      "statement_text": "The European Parliament Welcomes the Commission's communication with the greatest interest, notably its recognition that the existing fisheries management policy has failed and its objective of creating a new management model making it possible to ensure stock recovery, adapt the fishing effort to fisheries' real circumstances, and improve the reliability and stability of the fishing fleet;",
       "report_id": "A-6-2007-0298",
       "paragraph_index": 1
     },
-    "relation": "Okay, I need to figure out the relation between the SOURCE and the TARGET based on the given context. Let me start by understanding each part.\n\nThe TOPIC is about Sustainability in EU fisheries through maximum sustainable yield (debate). So the discussion is centered on EU fisheries management policies.\n\nLooking at the SOURCE: It's a statement by Carmen Fraga Estévez, a rapporteur. She's talking about a tragic incident where a Spanish fishing boat sank, causing deaths and missing people. She asks the Parliament to stand with the families and support the rescue efforts.\n\nNow the TARGET is a part of the European Parliament's statement. It says",
+    "relation": "Okay, I need to figure out the relation between the SOURCE and TARGET given the context of the topic. The topic is about sustainability in EU fisheries through maximum sustainable yield. The possible relations are 'no relation', 'attack', or 'support'.\n\nFirst, let's look at the SOURCE. It's a quote from Carmen Fraga Estévez, a rapporteur. She mentions a tragedy: a Spanish fishing boat sank off the Andalusian coast, resulting in three deaths and five missing. She asks the Parliament to stand with the families and hope for the rescue of the missing sailors. This part is about a specific incident and expressing condolences",
+    "reasoning": null,
     "topic": "Sustainability in EU fisheries through maximum sustainable yield (debate)"
   },
   {
@@ -30,11 +31,12 @@
     },
     "report_statement": {
       "statement_id": "A-6-2007-0298_para_2",
-      "statement_text": "The European Parliament 2.  Stresses the need for all future measures altering the current Community system of conservation and management to be taken with the full involvement of fishermen and to be based on scientific fisheries research;",
+      "statement_text": "The European Parliament Stresses the need for all future measures altering the current Community system of conservation and management to be taken with the full involvement of fishermen and to be based on scientific fisheries research;",
       "report_id": "A-6-2007-0298",
       "paragraph_index": 2
     },
-    "relation": "Okay, let's tackle this problem. So, I need to figure out the relation between the SOURCE and the TARGET based on the given TOPIC. The possible relations are 'no relation', 'attack', or 'support'. \n\nFirst, let me look at the TOPIC: Sustainability in EU fisheries through maximum sustainable yield (debate). That sets the context. The main issue here is about sustainable fishing practices in the EU, focusing on maximum sustainable yield, which is a key concept in fisheries management.\n\nNow, the SOURCE is a quote from Carmen Fraga Estévez, a rapporteur from the PPE-DE group. She",
+    "relation": "Okay, I need to figure out the relation between the SOURCE and TARGET based on the given context. Let me start by understanding each part.\n\nThe TOPIC is about Sustainability in EU fisheries through maximum sustainable yield (debate). So the discussion revolves around fisheries management in the EU, focusing on sustainability.\n\nLooking at the SOURCE: It's a statement by Carmen Fraga Estévez, a rapporteur from PPE-DE. She mentions a recent incident where a Spanish fishing boat sank, causing deaths and missing people. She asks the Parliament to stand with the families and support the rescue efforts. The key point here is the tragic accident involving",
+    "reasoning": null,
     "topic": "Sustainability in EU fisheries through maximum sustainable yield (debate)"
   },
   {
@@ -49,11 +51,12 @@
     },
     "report_statement": {
       "statement_id": "A-6-2007-0298_para_3",
-      "statement_text": "The European Parliament 3.  Highlights the need to increase the appropriations earmarked for scientific fisheries research in the seventh framework programme for research and technological development so that this programme can contribute to improving the Community fisheries conservation system through the development of theoretical fisheries management models, their application, improved analysis of the state of stocks, natural effects and other inter-species relationships, and improved fishing gear;",
+      "statement_text": "The European Parliament Highlights the need to increase the appropriations earmarked for scientific fisheries research in the seventh framework programme for research and technological development so that this programme can contribute to improving the Community fisheries conservation system through the development of theoretical fisheries management models, their application, improved analysis of the state of stocks, natural effects and other inter-species relationships, and improved fishing gear;",
       "report_id": "A-6-2007-0298",
       "paragraph_index": 3
     },
-    "relation": "We are given:\n  [RELATION]: {'no relation', 'attack', 'support'}\n  [TOPIC]: Sustainability in EU fisheries through maximum sustainable yield (debate)\n  [SOURCE]: Carmen Fraga Estévez (PPE-DE), rapporteur. – (ES) Madam President, allow me to say, first of all, that today a Spanish fishing boat sunk off the Andalusian coast and as a result three people died and five are currently missing. I ask Parliament to stand with the families in their sorrow and the desire for the missing sailors to be rescued.\n  [TARGET]: The European Parliament",
+    "relation": "We are given:\n- RELATION: {'no relation', 'attack', 'support'}\n- TOPIC: Sustainability in EU fisheries through maximum sustainable yield (debate)\n- SOURCE: Carmen Fraga Estévez (PPE-DE), rapporteur. – (ES) Madam President, allow me to say, first of all, that today a Spanish fishing boat sunk off the Andalusian coast and as a result three people died and five are currently missing. I ask Parliament to stand with the families in their sorrow and the desire for the missing sailors to be rescued.\n- TARGET: The European Parliament Highlights the need to increase",
+    "reasoning": null,
     "topic": "Sustainability in EU fisheries through maximum sustainable yield (debate)"
   },
   {
@@ -68,11 +71,12 @@
     },
     "report_statement": {
       "statement_id": "A-6-2007-0298_para_4",
-      "statement_text": "The European Parliament 4.  Notes the Commission's intention to achieve those objectives by making MSY the yardstick for fisheries management, but warns that, for a large majority of scientists and also for the FAO, the traditional MSY model has been superseded by new cutting-edge approaches which conceive the ecosystem as a whole and incorporate aspects relating to the environment, species interrelation, economic and social factors, etc;",
+      "statement_text": "The European Parliament Notes the Commission's intention to achieve those objectives by making MSY the yardstick for fisheries management, but warns that, for a large majority of scientists and also for the FAO, the traditional MSY model has been superseded by new cutting-edge approaches which conceive the ecosystem as a whole and incorporate aspects relating to the environment, species interrelation, economic and social factors, etc;",
       "report_id": "A-6-2007-0298",
       "paragraph_index": 4
     },
-    "relation": "We are given:\n  RELATION set: {'no relation', 'attack', 'support'}\n  TOPIC: Sustainability in EU fisheries through maximum sustainable yield (debate)\n  SOURCE: A statement by Carmen Fraga Estévez (PPE-DE), rapporteur, about a tragic incident (a Spanish fishing boat sinking) and a request for the Parliament to stand with the families.\n  TARGET: A statement about the European Parliament noting the Commission's intention to use MSY as a yardstick for fisheries management, but warning that the traditional MSY model has been superseded by new approaches.\n\nWe need to determine the relation between",
+    "relation": "We are given:\n- RELATION: {'no relation', 'attack', 'support'}\n- TOPIC: Sustainability in EU fisheries through maximum sustainable yield (debate)\n- SOURCE: Carmen Fraga Estévez (PPE-DE), rapporteur. – (ES) Madam President, allow me to say, first of all, that today a Spanish fishing boat sunk off the Andalusian coast and as a result three people died and five are currently missing. I ask Parliament to stand with the families in their sorrow and the desire for the missing sailors to be rescued.\n- TARGET: The European Parliament Notes the Commission's intention",
+    "reasoning": null,
     "topic": "Sustainability in EU fisheries through maximum sustainable yield (debate)"
   },
   {
@@ -87,11 +91,12 @@
     },
     "report_statement": {
       "statement_id": "A-6-2007-0298_para_5",
-      "statement_text": "The European Parliament 5.  Notes that leading scientists have in recent years developed new methods, based on computer simulations of fisheries, which emulate the MSY approach while not taking it as an explicit target, and take due account of uncertainties, environmental factors, and possible interactions between species, and which could in principle be extended to take into account specified social and economic factors;",
+      "statement_text": "The European Parliament Notes that leading scientists have in recent years developed new methods, based on computer simulations of fisheries, which emulate the MSY approach while not taking it as an explicit target, and take due account of uncertainties, environmental factors, and possible interactions between species, and which could in principle be extended to take into account specified social and economic factors;",
       "report_id": "A-6-2007-0298",
       "paragraph_index": 5
     },
-    "relation": "First, I need to determine the relation between the SOURCE and the TARGET based on the given RELATION set: 'no relation', 'attack', or 'support'.\n\nThe TOPIC is \"Sustainability in EU fisheries through maximum sustainable yield (debate)\", which sets the context.\n\nNow, let's look at the SOURCE:\n- It's a quote from Carmen Fraga Estévez, a rapporteur, talking about a Spanish fishing boat sinking, causing deaths and missing people. She's asking the Parliament to stand with the families.\n\nThe TARGET:\n- It's a part of a parliamentary note about leading scientists developing new methods based on computer",
+    "relation": "First, I need to understand the task. I'm to determine the relation between the SOURCE and the TARGET based on the given RELATION set: 'no relation', 'attack', or 'support'. The TOPIC is \"Sustainability in EU fisheries through maximum sustainable yield (debate)\".\n\nLet me look at the SOURCE and TARGET.\n\nSOURCE: Carmen Fraga Estévez (PPE-DE), rapporteur. She's speaking about a recent incident where a Spanish fishing boat sank, causing deaths and missing persons. She asks the Parliament to stand with the families and hope for the rescue of the missing sailors.\n\nTARGET: This is",
+    "reasoning": null,
     "topic": "Sustainability in EU fisheries through maximum sustainable yield (debate)"
   },
   {
@@ -106,11 +111,12 @@
     },
     "report_statement": {
       "statement_id": "A-6-2007-0298_para_6",
-      "statement_text": "The European Parliament 6.  Warns that it will be difficult to apply the MSY model to multispecies fisheries (i.e. the majority of those in the EU), since if the MSY applied were that of the main species the others could be overfished, while if, as would seem logical, one applied that of the most vulnerable species it would be necessary to stop catching those species that were in a good biological state, with adverse effects in economic, employment and competitiveness terms, a situation which would be in total contradiction with the notion of MSY as such;",
+      "statement_text": "The European Parliament Warns that it will be difficult to apply the MSY model to multispecies fisheries (i.e. the majority of those in the EU), since if the MSY applied were that of the main species the others could be overfished, while if, as would seem logical, one applied that of the most vulnerable species it would be necessary to stop catching those species that were in a good biological state, with adverse effects in economic, employment and competitiveness terms, a situation which would be in total contradiction with the notion of MSY as such;",
       "report_id": "A-6-2007-0298",
       "paragraph_index": 6
     },
-    "relation": "Okay, let me try to figure out the relationship between the SOURCE and TARGET in this context. The topic is about sustainability in EU fisheries through maximum sustainable yield (MSY). \n\nFirst, I'll look at the SOURCE. It's a statement by Carmen Fraga Estévez, a rapporteur. She mentions a tragic incident where a Spanish fishing boat sank, leading to deaths and missing people. She asks the Parliament to support the families and call for the rescue of the missing sailors. So, this is a humanitarian appeal related to a recent accident.\n\nNow, the TARGET is about the European Parliament warning that applying the MSY model to",
+    "relation": "We are given:\n- [RELATION] set: {'no relation', 'attack', 'support'}\n- [TOPIC]: Sustainability in EU fisheries through maximum sustainable yield (debate)\n- [SOURCE]: A statement by Carmen Fraga Estévez (a rapporteur) about a fishing boat sinking and casualties, asking for the Parliament to stand with the families.\n- [TARGET]: A statement about the European Parliament warning that applying the MSY model to multispecies fisheries is difficult, with economic and employment concerns.\n\nWe need to determine the relation between SOURCE and TARGET.\n\nStep 1: Understand the context (TOPIC). The topic",
+    "reasoning": null,
     "topic": "Sustainability in EU fisheries through maximum sustainable yield (debate)"
   },
   {
@@ -125,11 +131,12 @@
     },
     "report_statement": {
       "statement_id": "A-6-2007-0298_para_7",
-      "statement_text": "The European Parliament 7.  Is, therefore, obliged to deplore the deficient analysis and inadequate solutions offered by the Commission's communication, with regard to the above aspects in particular, and, in general terms, the absence of an in-depth evaluation of what applying an MSY model would actually mean, in terms of its shortcomings, the particularities of its application, and the potential risks of any errors in the model; also regrets, notably, the absence of an analysis of the evolution of the MSY concept and the potential advantages of the different approaches;",
+      "statement_text": "The European Parliament Is, therefore, obliged to deplore the deficient analysis and inadequate solutions offered by the Commission's communication, with regard to the above aspects in particular, and, in general terms, the absence of an in-depth evaluation of what applying an MSY model would actually mean, in terms of its shortcomings, the particularities of its application, and the potential risks of any errors in the model; also regrets, notably, the absence of an analysis of the evolution of the MSY concept and the potential advantages of the different approaches;",
       "report_id": "A-6-2007-0298",
       "paragraph_index": 7
     },
-    "relation": "Okay, let's tackle this problem. So, I need to figure out the relation between the SOURCE and TARGET based on the given topic. The relation options are 'no relation', 'attack', or 'support'. The topic is about sustainability in EU fisheries through maximum sustainable yield (MSY) debate.\n\nFirst, I'll look at the SOURCE. It's a statement by Carmen Fraga Estévez, who's the rapporteur for PPE-DE. She's talking about a Spanish fishing boat sinking off the Andalusian coast, resulting in deaths and missing sailors. She's asking the Parliament to stand with the families and support",
+    "relation": "We are given:\n- RELATION: {'no relation', 'attack', 'support'}\n- TOPIC: Sustainability in EU fisheries through maximum sustainable yield (debate)\n- SOURCE: A statement by Carmen Fraga Estévez (PPE-DE), rapporteur, about a tragic incident (a Spanish fishing boat sinking) and asking Parliament to stand with the families.\n- TARGET: A statement from the European Parliament (in a debate context) about the Commission's communication being deficient, lacking in-depth evaluation of the MSY model, etc.\n\nWe must decide the relation between SOURCE and TARGET.\n\nFirst, let's understand the context:",
+    "reasoning": null,
     "topic": "Sustainability in EU fisheries through maximum sustainable yield (debate)"
   },
   {
@@ -144,11 +151,12 @@
     },
     "report_statement": {
       "statement_id": "A-6-2007-0298_para_8",
-      "statement_text": "The European Parliament 8.  Considers, therefore, that the time is not ripe to propose the introduction of an MSY system, and that a deeper and more rigorous analysis is needed of the problems, shortcomings and objectives of the Community's conservation and management policy as such, with a view to deciding, with all political courage, the most suitable measures for introducing the changes that are most needed to the present CFP;",
+      "statement_text": "The European Parliament Considers, therefore, that the time is not ripe to propose the introduction of an MSY system, and that a deeper and more rigorous analysis is needed of the problems, shortcomings and objectives of the Community's conservation and management policy as such, with a view to deciding, with all political courage, the most suitable measures for introducing the changes that are most needed to the present CFP;",
       "report_id": "A-6-2007-0298",
       "paragraph_index": 8
     },
-    "relation": "We are given:\n- RELATION set: {'no relation', 'attack', 'support'}\n- TOPIC: Sustainability in EU fisheries through maximum sustainable yield (debate)\n- SOURCE: A statement by Carmen Fraga Estévez (PPE-DE), rapporteur, about a recent tragedy (a Spanish fishing boat sinking, 3 dead, 5 missing) and asking the Parliament to stand with the families and hope for rescue of the missing.\n- TARGET: A statement from the European Parliament (in a resolution) that considers the time not ripe to introduce an MSY (Maximum Sustainable Yield) system, and calls for deeper",
+    "relation": "Okay, I need to figure out the relation between the SOURCE and TARGET based on the given context. Let's start by understanding each part.\n\nThe TOPIC is about Sustainability in EU fisheries through maximum sustainable yield (MSY), which is a debate. The RELATION options are 'no relation', 'attack', or 'support'.\n\nFirst, look at the SOURCE. It's a quote from Carmen Fraga Estévez, a rapporteur from PPE-DE. She's talking about a fishing boat sinking off Andalusia, resulting in deaths and missing sailors. She asks the Parliament to stand with the families and hope for the missing",
+    "reasoning": null,
     "topic": "Sustainability in EU fisheries through maximum sustainable yield (debate)"
   },
   {
@@ -163,11 +171,12 @@
     },
     "report_statement": {
       "statement_id": "A-6-2007-0298_para_9",
-      "statement_text": "The European Parliament 9.  Is perplexed, given the above, at the recent measures announced by the Commission for the purpose of complying with the MSY model, such as the regulation laying down the TACs and quotas for 2007[3], when the Commission itself has recognised, in various debates and institutional contexts, that numerous studies are still needed on different aspects of the application of MSY;",
+      "statement_text": "The European Parliament Is perplexed, given the above, at the recent measures announced by the Commission for the purpose of complying with the MSY model, such as the regulation laying down the TACs and quotas for 2007[3], when the Commission itself has recognised, in various debates and institutional contexts, that numerous studies are still needed on different aspects of the application of MSY;",
       "report_id": "A-6-2007-0298",
       "paragraph_index": 9
     },
-    "relation": "First, I need to determine the relation between the SOURCE and TARGET based on the given RELATION set: {'no relation', 'attack', 'support'}.\n\nThe TOPIC is: \"Sustainability in EU fisheries through maximum sustainable yield (debate)\".\n\nNow, let's look at the SOURCE and TARGET.\n\nSOURCE: This is a quote from Carmen Fraga Estévez, a rapporteur for PPE-DE. She's speaking about a tragic event: a Spanish fishing boat sinking off the Andalusian coast, resulting in deaths and missing people. She asks the Parliament to stand with the families and desire for rescue.\n\nTARGET",
+    "relation": "We are given:\n- Relation set: {'no relation', 'attack', 'support'}\n- Topic: Sustainability in EU fisheries through maximum sustainable yield (debate)\n- Source: Carmen Fraga Estévez (PPE-DE), rapporteur. She speaks about a recent tragedy (a Spanish fishing boat sunk off Andalusian coast, 3 dead, 5 missing) and asks for the Parliament to stand with the families and for the rescue of the missing.\n- Target: The European Parliament is perplexed at the Commission's measures for MSY (like the TACs and quotas for 2007) because",
+    "reasoning": null,
     "topic": "Sustainability in EU fisheries through maximum sustainable yield (debate)"
   },
   {
@@ -182,11 +191,12 @@
     },
     "report_statement": {
       "statement_id": "A-6-2007-0298_para_10",
-      "statement_text": "The European Parliament 10. Is concerned that, in the context of the ambitious objective of changing the approach of the conservation and management system for the CFP, advantage is not being taken of the opportunity to provide a clear definition of the system of access to resources, and that the TAC/quota system and the fishing effort system are continuing to overlap; believes that the Commission must seize this opportunity to devise a system of access to resources that puts the accent on sustainability, discourages discards, simplifies the technical measures, eliminates discrimination and excessive competition for stocks, introduces the necessary flexibility, and boosts the sector's competitiveness;",
+      "statement_text": "The European Parliament Is concerned that, in the context of the ambitious objective of changing the approach of the conservation and management system for the CFP, advantage is not being taken of the opportunity to provide a clear definition of the system of access to resources, and that the TAC/quota system and the fishing effort system are continuing to overlap; believes that the Commission must seize this opportunity to devise a system of access to resources that puts the accent on sustainability, discourages discards, simplifies the technical measures, eliminates discrimination and excessive competition for stocks, introduces the necessary flexibility, and boosts the sector's competitiveness;",
       "report_id": "A-6-2007-0298",
       "paragraph_index": 10
     },
-    "relation": "Okay, I need to figure out the relationship between the SOURCE and TARGET in the context of sustainability in EU fisheries. The possible relations are 'no relation', 'attack', or 'support'. Let me start by understanding both texts.\n\nFirst, the SOURCE is a statement by Carmen Fraga Estévez, who's a rapporteur. She mentions a tragic event: a Spanish fishing boat sank off Andalusia, causing deaths and missing people. She asks the Parliament to stand with the families and hope for the missing sailors to be rescued. So, this is about a specific incident affecting fishermen, expressing sorrow and a request for support in a",
+    "relation": "We are given:\n- RELATION: {'no relation', 'attack', 'support'}\n- TOPIC: Sustainability in EU fisheries through maximum sustainable yield (debate)\n- SOURCE: Carmen Fraga Estévez (PPE-DE), rapporteur. – (ES) Madam President, allow me to say, first of all, that today a Spanish fishing boat sunk off the Andalusian coast and as a result three people died and five are currently missing. I ask Parliament to stand with the families in their sorrow and the desire for the missing sailors to be rescued.\n- TARGET: The European Parliament Is concerned that, in",
+    "reasoning": null,
     "topic": "Sustainability in EU fisheries through maximum sustainable yield (debate)"
   }
 ]
