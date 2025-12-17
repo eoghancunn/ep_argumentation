@@ -45,7 +45,7 @@ def is_president_intervention(speaker: Optional[str]) -> bool:
 
 
 def extract_from_text(model: ArgumentMiningModel, text: str, output_file: Optional[str] = None,
-                     max_new_tokens: int = 256, temperature: float = 0.7, top_p: float = 0.9,
+                     max_new_tokens: int = 800, temperature: float = 0.7, top_p: float = 0.9,
                      use_greedy: bool = False) -> Dict:
     """
     Extract arguments from a single text.
@@ -80,7 +80,7 @@ def extract_from_text(model: ArgumentMiningModel, text: str, output_file: Option
 
 def extract_from_intervention(model: ArgumentMiningModel, intervention_file: str, 
                              output_dir: Optional[str] = None,
-                             max_new_tokens: int = 256, temperature: float = 0.7, top_p: float = 0.9,
+                             max_new_tokens: int = 800, temperature: float = 0.7, top_p: float = 0.9,
                              use_greedy: bool = False) -> Dict:
     """
     Extract arguments from a single intervention JSON file.
@@ -135,7 +135,7 @@ def extract_from_intervention(model: ArgumentMiningModel, intervention_file: str
 def extract_from_debate(model: ArgumentMiningModel, debate_dir: str, 
                       output_dir: Optional[str] = None, 
                       max_interventions: Optional[int] = None,
-                      max_new_tokens: int = 256, temperature: float = 0.7, top_p: float = 0.9,
+                      max_new_tokens: int = 800, temperature: float = 0.7, top_p: float = 0.9,
                       use_greedy: bool = False) -> List[Dict]:
     """
     Extract arguments from all interventions in a debate directory.
@@ -264,8 +264,8 @@ Examples:
     # Processing options
     parser.add_argument('--max-interventions', type=int,
                        help='Maximum number of interventions to process (for --debate)')
-    parser.add_argument('--max-new-tokens', type=int, default=256,
-                       help='Maximum number of tokens to generate (default: 256, reduced for speed)')
+    parser.add_argument('--max-new-tokens', type=int, default=800,
+                       help='Maximum number of tokens to generate (default: 800, matching model example)')
     parser.add_argument('--temperature', type=float, default=None,
                        help='Sampling temperature (default: 0.05 for API, 0.7 for local, ignored if --greedy)')
     parser.add_argument('--top-p', type=float, default=0.9,
