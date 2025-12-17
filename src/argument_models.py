@@ -532,6 +532,7 @@ class ArgumentRelationModelOllama:
             "model": self.model_name,
             "prompt": prompt,
             "stream": False,
+            "think":False,
             "options": {
                 "temperature": self.temperature,
                 "num_predict": max_new_tokens,
