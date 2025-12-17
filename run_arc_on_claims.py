@@ -256,7 +256,7 @@ def compare_intervention_ids(id1: str, id2: str) -> int:
 
 def classify_argument_pairs(model: ArgumentRelationModel, arguments: List[Dict], 
                         debate_id: str, topic: str = "", output_file: Optional[str] = None,
-                        max_pairs: Optional[int] = None) -> List[Dict]:
+                        max_pairs: Optional[int] = None, max_new_tokens: int = 128) -> List[Dict]:
     """
     Classify relations between all pairs of arguments within the same debate.
     Only compares arguments chronologically (source must come after target).
@@ -268,6 +268,7 @@ def classify_argument_pairs(model: ArgumentRelationModel, arguments: List[Dict],
         topic: Topic/context for the debate
         output_file: Optional file to save results
         max_pairs: Maximum number of pairs to process (None = all)
+        max_new_tokens: Maximum number of new tokens to generate (default: 128)
         
     Returns:
         List of relation classification results
@@ -304,7 +305,8 @@ def classify_argument_pairs(model: ArgumentRelationModel, arguments: List[Dict],
             relation_result = model.classify_relation(
                 source=arg1['argument_text'],
                 target=arg2['argument_text'],
-                topic=topic
+                topic=topic,
+                max_new_tokens=max_new_tokens
             )
             
             # Handle both dict and string returns for backward compatibility
@@ -355,7 +357,8 @@ def classify_arguments_to_report_statements(model: ArgumentRelationModel,
                                         debate_id: str, 
                                         topic: str = "", 
                                         output_file: Optional[str] = None,
-                                        max_pairs: Optional[int] = None) -> List[Dict]:
+                                        max_pairs: Optional[int] = None,
+                                        max_new_tokens: int = 128) -> List[Dict]:
     """
     Classify relations between mined arguments and report statements.
     
@@ -367,6 +370,7 @@ def classify_arguments_to_report_statements(model: ArgumentRelationModel,
         topic: Topic/context for the debate
         output_file: Optional file to save results
         max_pairs: Maximum number of pairs to process (None = all)
+        max_new_tokens: Maximum number of new tokens to generate (default: 128)
         
     Returns:
         List of relation classification results
@@ -390,7 +394,8 @@ def classify_arguments_to_report_statements(model: ArgumentRelationModel,
             relation_result = model.classify_relation(
                 source=argument['argument_text'],
                 target=statement['statement_text'],
-                topic=topic
+                topic=topic,
+                max_new_tokens=max_new_tokens
             )
             
             # Handle both dict and string returns for backward compatibility
@@ -485,6 +490,8 @@ Examples:
     # Processing options
     parser.add_argument('--max-pairs', type=int,
                       help='Maximum number of pairs to process per type (None = all)')
+    parser.add_argument('--max-new-tokens', type=int, default=128,
+                      help='Maximum number of new tokens to generate (default: 128)')
     parser.add_argument('--skip-claim-pairs', action='store_true',
                       help='Skip argument-to-argument relation classification (only do argument-to-report-statement)')
     parser.add_argument('--skip-report-relations', action='store_true',
@@ -602,7 +609,8 @@ Examples:
                     debate_id=debate_id,
                     topic=topic,
                     output_file=argument_to_report_file,
-                    max_pairs=debate_max_pairs
+                    max_pairs=debate_max_pairs,
+                    max_new_tokens=args.max_new_tokens
                 )
                 
                 debate_results['argument_to_report_statement'] = argument_to_report_results
@@ -623,7 +631,8 @@ Examples:
                     debate_id=debate_id,
                     topic=topic,
                     output_file=argument_to_argument_file,
-                    max_pairs=debate_max_pairs
+                    max_pairs=debate_max_pairs,
+                    max_new_tokens=args.max_new_tokens
                 )
                 
                 debate_results['argument_to_argument'] = argument_to_argument_results
