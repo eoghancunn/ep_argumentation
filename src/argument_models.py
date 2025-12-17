@@ -532,6 +532,7 @@ class ArgumentRelationModelOllama:
                 {"role": "user", "content": user_content}
             ],
             "stream": False,
+            "think":False,
             "options": {
                 "temperature": self.temperature,
                 "num_predict": max_new_tokens,
