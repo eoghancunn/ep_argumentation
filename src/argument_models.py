@@ -457,7 +457,7 @@ class ArgumentRelationModelOllama:
         self.model_name = model_name
         # Get base URL from environment variable or use provided/default
         if base_url is None:
-            base_url = os.getenv('OLLAMA_URL', 'http://localhost:11434')
+            base_url = os.getenv('OLLAMA_URL', 'http://localhost:11435')
         self.base_url = base_url.rstrip('/')
         self.api_url = f"{self.base_url}/api/chat"
         
