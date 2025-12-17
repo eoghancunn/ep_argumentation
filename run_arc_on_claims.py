@@ -371,6 +371,9 @@ Examples:
   # Classify relations for all argument pairs and argument-to-report-statement pairs
   python run_arc_on_claims.py --input results/ --debates-dir data/debates --output results/arc_results.json
 
+  # Use Ollama instead of local model
+  python run_arc_on_claims.py --input results/ --debates-dir data/debates --output results/arc_results.json --use-ollama --ollama-model llama3.1
+
   # Limit to first 100 pairs for testing
   python run_arc_on_claims.py --input results/ --debates-dir data/debates --max-pairs 100 --output results/arc_test.json
 
@@ -390,15 +393,21 @@ Examples:
                       help='Topic/context for the debate (optional)')
     
     # Model options
+    parser.add_argument('--use-ollama', action='store_true',
+                      help='Use Ollama API instead of loading local model (requires Ollama running)')
+    parser.add_argument('--ollama-model', type=str, default='llama3.1',
+                      help='Ollama model name (default: llama3.1, only used with --use-ollama)')
+    parser.add_argument('--ollama-url', type=str, default=None,
+                      help='Ollama API URL (default: from OLLAMA_URL env var or http://localhost:11434, only used with --use-ollama)')
     parser.add_argument('--model', type=str,
                       default='brunoyun/Llama-3.1-Amelia-AR-8B-v1',
-                      help='Model name (default: brunoyun/Llama-3.1-Amelia-AR-8B-v1)')
+                      help='Model name (default: brunoyun/Llama-3.1-Amelia-AR-8B-v1, ignored if --use-ollama)')
     parser.add_argument('--device', type=str, choices=['cuda', 'mps', 'cpu'],
-                      help='Device to use (auto-detect if not specified)')
+                      help='Device to use (auto-detect if not specified, ignored if --use-ollama)')
     parser.add_argument('--load-in-4bit', action='store_true',
-                      help='Use 4-bit quantization (CUDA only)')
+                      help='Use 4-bit quantization (CUDA only, ignored if --use-ollama)')
     parser.add_argument('--load-in-8bit', action='store_true',
-                      help='Use 8-bit quantization (works on all platforms, recommended for MPS)')
+                      help='Use 8-bit quantization (works on all platforms, recommended for MPS, ignored if --use-ollama)')
     
     # Processing options
     parser.add_argument('--max-pairs', type=int,
@@ -409,22 +418,6 @@ Examples:
                       help='Skip argument-to-report-statement relation classification (only do argument-to-argument)')
     
     args = parser.parse_args()
-    
-    # Auto-detect device if not specified (prefer CUDA for remote GPU)
-    if not args.device:
-        if torch.cuda.is_available():
-            args.device = "cuda"
-        elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
-            args.device = "mps"
-        else:
-            args.device = "cpu"
-    
-    # Auto-detect quantization based on device
-    if not args.load_in_4bit and not args.load_in_8bit:
-        if args.device == "cuda":
-            args.load_in_4bit = True
-        elif args.device == "mps" or (platform.system() == "Darwin" and args.device != "cuda"):
-            args.load_in_8bit = True
     
     # Load extracted files
     extracted_results = load_extracted_files(args.input)
@@ -449,18 +442,44 @@ Examples:
                                     if len(arguments) >= 2}
     
     # Load ARC model
-    
     try:
-        model = ArgumentRelationModel(
-            model_name=args.model,
-            device=args.device,
-            load_in_4bit=args.load_in_4bit,
-            load_in_8bit=args.load_in_8bit
-        )
+        if args.use_ollama:
+            # Use provided URL or None (which will use env var or default)
+            ollama_url = args.ollama_url if args.ollama_url else None
+            model = ArgumentRelationModelOllama(
+                model_name=args.ollama_model,
+                base_url=ollama_url
+            )
+        else:
+            # Auto-detect device if not specified (prefer CUDA for remote GPU)
+            if not args.device:
+                if torch.cuda.is_available():
+                    args.device = "cuda"
+                elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+                    args.device = "mps"
+                else:
+                    args.device = "cpu"
+            
+            # Auto-detect quantization based on device
+            if not args.load_in_4bit and not args.load_in_8bit:
+                if args.device == "cuda":
+                    args.load_in_4bit = True
+                elif args.device == "mps" or (platform.system() == "Darwin" and args.device != "cuda"):
+                    args.load_in_8bit = True
+            
+            model = ArgumentRelationModel(
+                model_name=args.model,
+                device=args.device,
+                load_in_4bit=args.load_in_4bit,
+                load_in_8bit=args.load_in_8bit
+            )
     except Exception as e:
         print(f"Error loading model: {e}")
         if "out of memory" in str(e).lower():
-            print("\nTip: Try using --load-in-8bit, --device cpu, or reduce --max-pairs")
+            print("\nTip: Try using --load-in-8bit, --device cpu, --use-ollama, or reduce --max-pairs")
+        elif args.use_ollama:
+            print("\nTip: Make sure Ollama is running: ollama serve")
+            print(f"      And the model is pulled: ollama pull {args.ollama_model}")
         sys.exit(1)
     
     # Create output directory structure

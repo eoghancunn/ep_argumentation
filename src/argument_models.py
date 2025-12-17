@@ -19,6 +19,12 @@ try:
 except ImportError:
     GRADIO_AVAILABLE = False
 
+try:
+    import requests
+    REQUESTS_AVAILABLE = True
+except ImportError:
+    REQUESTS_AVAILABLE = False
+
 
 class ArgumentMiningModel:
     """Model for extracting argumentative units from text."""
@@ -425,6 +431,134 @@ class ArgumentRelationModel:
         
         # If no answer found in tags, return the generated text (might be the answer itself)
         return generated_text.strip()
+
+
+class ArgumentRelationModelOllama:
+    """Model for classifying argument relations using Ollama API."""
+    
+    def __init__(self, model_name: str = "llama3.1", base_url: Optional[str] = None):
+        """
+        Initialize the argument relation model using Ollama.
+        
+        Args:
+            model_name: Ollama model name (default: "llama3.1")
+            base_url: Ollama API base URL (default: from OLLAMA_URL env var or "http://localhost:11434")
+        """
+        if not REQUESTS_AVAILABLE:
+            raise ImportError(
+                "requests is required for Ollama mode. Install it with: pip install requests"
+            )
+        
+        self.model_name = model_name
+        # Get base URL from environment variable or use provided/default
+        if base_url is None:
+            base_url = os.getenv('OLLAMA_URL', 'http://localhost:11434')
+        self.base_url = base_url.rstrip('/')
+        self.api_url = f"{self.base_url}/api/chat"
+        
+        # System prompt as specified in the model card (same as ArgumentRelationModel)
+        self.system_prompt = (
+            "You are an expert in argumentation. Your task is to determine the type of relation "
+            "between [SOURCE] and [TARGET]. The type of relation would be in the [RELATION] set. "
+            "Utilize the [TOPIC] as context to support your decision\n"
+            "Your answer must be in the following format with only the type of the relation in the answer section:\n"
+            "<|ANSWER|><answer><|ANSWER|>."
+        )
+        
+        # Model parameters as specified in the model card
+        self.temperature = 1.5
+        self.min_p = 0.1
+        
+        print(f"Using Ollama for argument relation classification")
+        print(f"Model: {model_name}")
+        print(f"API URL: {self.api_url}")
+        
+        # Test connection
+        try:
+            response = requests.post(
+                f"{self.base_url}/api/show",
+                json={"name": model_name},
+                timeout=5
+            )
+            if response.status_code == 200:
+                print("Ollama connection successful!")
+            else:
+                print(f"Warning: Could not verify model '{model_name}'. Make sure it's pulled: ollama pull {model_name}")
+        except Exception as e:
+            print(f"Warning: Could not connect to Ollama: {e}")
+            print(f"Make sure Ollama is running: ollama serve")
+    
+    def classify_relation(self, source: str, target: str, topic: str = "",
+                         relations: List[str] = None, max_new_tokens: int = 128) -> str:
+        """
+        Classify the relation between source and target arguments using Ollama.
+        
+        Args:
+            source: Source argument text
+            target: Target argument text
+            topic: Topic/context for the arguments
+            relations: List of possible relations (default: ['no relation', 'attack', 'support'])
+            max_new_tokens: Maximum number of tokens to generate
+            
+        Returns:
+            Predicted relation type
+        """
+        if relations is None:
+            relations = ['no relation', 'attack', 'support']
+        
+        # Format relations as a set string
+        relations_str = "{'" + "', '".join(relations) + "'}"
+        
+        # Create user message (same format as ArgumentRelationModel)
+        user_content = (
+            f"[RELATION]: {relations_str}\n"
+            f"[TOPIC]: {topic}\n"
+            f"[SOURCE]: {source}\n"
+            f"[TARGET]: {target}\n"
+        )
+        
+        # Prepare request payload using chat API format
+        payload = {
+            "model": self.model_name,
+            "messages": [
+                {"role": "system", "content": self.system_prompt},
+                {"role": "user", "content": user_content}
+            ],
+            "stream": False,
+            "options": {
+                "temperature": self.temperature,
+                "num_predict": max_new_tokens,
+                "min_p": self.min_p
+            }
+        }
+        
+        try:
+            response = requests.post(self.api_url, json=payload, timeout=60)
+            response.raise_for_status()
+            
+            result = response.json()
+            # Chat API returns message object
+            message = result.get('message', {})
+            generated_text = message.get('content', '').strip()
+            
+            # Extract answer from <|ANSWER|> tags (same as ArgumentRelationModel)
+            if "<|ANSWER|>" in generated_text:
+                parts = generated_text.split("<|ANSWER|>")
+                if len(parts) >= 2:
+                    answer = parts[1].strip()
+                    # Remove any trailing <|ANSWER|> tag
+                    answer = answer.replace("<|ANSWER|>", "").strip()
+                    # Clean up any remaining whitespace or newlines
+                    answer = answer.strip()
+                    if answer:
+                        return answer
+            
+            # If no answer found in tags, return the generated text (might be the answer itself)
+            return generated_text.strip()
+            
+        except requests.exceptions.RequestException as e:
+            print(f"Error calling Ollama API: {e}")
+            raise
 
 
 def load_intervention(file_path: str) -> Dict:
