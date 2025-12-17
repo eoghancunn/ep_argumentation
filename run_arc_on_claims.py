@@ -22,7 +22,7 @@ import platform
 import torch
 from tqdm import tqdm
 
-from src.argument_models import ArgumentRelationModel
+from src.argument_models import ArgumentRelationModel, ArgumentRelationModelOllama
 
 
 def is_president_intervention(speaker: Optional[str]) -> bool:
