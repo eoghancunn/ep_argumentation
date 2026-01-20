@@ -1,0 +1,247 @@
+{
+  "intervention_id": "3-361",
+  "debate_id": "CRE-20070905-ITEM-015",
+  "annotations": [
+    {
+      "text": "I am pleased to see that we are in broad agreement, in particular on the need to move away from annual decision-making allowing for a more gradual approach and for better planning by the sector.",
+      "start": 285,
+      "end": 480,
+      "type": "claim",
+      "sentence_indices": [
+        2
+      ]
+    },
+    {
+      "text": "A longer-term approach will also allow for more stability and sustainability in the exploitation of fisheries resources.",
+      "start": 480,
+      "end": 601,
+      "type": "claim",
+      "sentence_indices": [
+        3
+      ]
+    },
+    {
+      "text": "I am sure that we are in agreement on the objectives of urgently taking measures to improve the very poor state of fisheries resources in Europe in order to bring the stocks to sustainable levels, which, at the same time, will improve the profitability of the fishing industries in the long term.",
+      "start": 601,
+      "end": 898,
+      "type": "claim",
+      "sentence_indices": [
+        4
+      ]
+    },
+    {
+      "text": "Apart from the benefits to industry, there is an international political commitment that should be met.",
+      "start": 898,
+      "end": 1002,
+      "type": "claim",
+      "sentence_indices": [
+        5
+      ]
+    },
+    {
+      "text": "In particular I appreciate and share the Committee on Fisheries’ view that the common fisheries policy needs a new management model for the setting of fishing opportunities, the recovery of depleted stocks and the adaptation of fishing effort levels to sustainable and profitable levels.",
+      "start": 1002,
+      "end": 1290,
+      "type": "claim",
+      "sentence_indices": [
+        6
+      ]
+    },
+    {
+      "text": "Also, and very importantly, adjusting fishing efforts to MSY levels is the single most important action that can be taken to reduce discarding in European waters.",
+      "start": 1290,
+      "end": 1453,
+      "type": "claim",
+      "sentence_indices": [
+        7
+      ]
+    },
+    {
+      "text": "First of all, I know that evaluating MSY is not a simple matter. There are scientific uncertainties and the matter is complicated because of eco-system effects and mixed fisheries issues.",
+      "start": 1565,
+      "end": 1753,
+      "type": "claim",
+      "sentence_indices": [
+        10,
+        11
+      ]
+    },
+    {
+      "text": "Fisheries science is not yet able to predict accurately what MSY for any particular stock or mixture of stocks will be.",
+      "start": 1753,
+      "end": 1873,
+      "type": "claim",
+      "sentence_indices": [
+        12
+      ]
+    },
+    {
+      "text": "But we must not only look at the difficulties.",
+      "start": 1873,
+      "end": 1920,
+      "type": "claim",
+      "sentence_indices": [
+        13
+      ]
+    },
+    {
+      "text": "Science can tell us in which direction fisheries should move in order to improve yields and decrease costs. Even if the destination is imprecise, the direction is known quite well.",
+      "start": 1920,
+      "end": 2101,
+      "type": "claim",
+      "sentence_indices": [
+        14,
+        15
+      ]
+    },
+    {
+      "text": "We should start to move in the right direction and progressively evaluate and review the MSY reference points as fisheries develop.",
+      "start": 2101,
+      "end": 2233,
+      "type": "claim",
+      "sentence_indices": [
+        16
+      ]
+    },
+    {
+      "text": "Mixed fishery situations need to be studied carefully and the best possible solutions identified in relation to the potential yield of the whole fisheries system. This progressive approach will allow environmental, economic and social aspects to be explored.",
+      "start": 2233,
+      "end": 2492,
+      "type": "claim",
+      "sentence_indices": [
+        17,
+        18
+      ]
+    },
+    {
+      "text": "Let me underline here that the long-term management plans in practical terms move fisheries management in the right direction: that is, away from over-exploitation and not necessarily to a fixed MSY target.",
+      "start": 2795,
+      "end": 3002,
+      "type": "claim",
+      "sentence_indices": [
+        21
+      ]
+    },
+    {
+      "text": "The plans include provisions for regular revisions of the targets that allow for the adaptation of MSY targets where necessary, for example, where there is a change in the natural environment or where there is a revision of the scientific advice.",
+      "start": 3002,
+      "end": 3249,
+      "type": "claim",
+      "sentence_indices": [
+        22
+      ]
+    },
+    {
+      "text": "Secondly, I agree that it is important to address fisheries issues on a local basis and to involve the stakeholders in the important decisions concerning the choice of objectives, the rate at which we should move towards those objectives and the right combination of measures to take such as tax, effort management and technical adaptations.",
+      "start": 3249,
+      "end": 3591,
+      "type": "claim",
+      "sentence_indices": [
+        23
+      ]
+    },
+    {
+      "text": "The Commission will only prepare MSY plans on a regional basis and only after a detailed consultation with the sectors involved. The region advisory councils will play an important role here and their work has already begun.",
+      "start": 3591,
+      "end": 3816,
+      "type": "claim",
+      "sentence_indices": [
+        24,
+        25
+      ]
+    },
+    {
+      "text": "Economic and social analyses are also important in this process and the Commission will accompany all proposals for management plans with impact assessments where economic, social and environmental aspects of the proposals will be analysed.",
+      "start": 3816,
+      "end": 4057,
+      "type": "claim",
+      "sentence_indices": [
+        26
+      ]
+    },
+    {
+      "text": "Increased support for fisheries research is a necessary part of the development of MSY plans.",
+      "start": 4057,
+      "end": 4151,
+      "type": "claim",
+      "sentence_indices": [
+        27
+      ]
+    },
+    {
+      "text": "The framework programmes, the work of the Scientific, Technical and Economic Committee for Fisheries and the support of the International Council for the Exploration of the Sea will all be important in this context, which will be a priority area for the next years.",
+      "start": 4151,
+      "end": 4417,
+      "type": "claim",
+      "sentence_indices": [
+        28
+      ]
+    },
+    {
+      "text": "Moving to MSY fisheries will, in many cases, mean adjustments of fleet capacity and reductions in fishing effort.",
+      "start": 4417,
+      "end": 4531,
+      "type": "claim",
+      "sentence_indices": [
+        29
+      ]
+    },
+    {
+      "text": "The European Fisheries Fund was designed so that Member States can plan the development of the national fleet capacity and use co-funding from the Community budget to help adjust the fleet size according to long-term objectives and taking appropriate social and economic provisions into account.",
+      "start": 4531,
+      "end": 4827,
+      "type": "claim",
+      "sentence_indices": [
+        30
+      ]
+    },
+    {
+      "text": "The Commission believes that a gradual approach to moving to MSY conditions should in fact be a general rule. There is no need in all cases to move drastically to MSY.",
+      "start": 4925,
+      "end": 5093,
+      "type": "claim",
+      "sentence_indices": [
+        32,
+        33
+      ]
+    },
+    {
+      "text": "As regards scientific methodology for reaching MSY, the Commission will ask for scientific advice on a case-by-case basis.",
+      "start": 5093,
+      "end": 5216,
+      "type": "claim",
+      "sentence_indices": [
+        34
+      ]
+    },
+    {
+      "text": "We should not prejudice the scientific debate by prejudging which methods may be better than others.",
+      "start": 5216,
+      "end": 5317,
+      "type": "claim",
+      "sentence_indices": [
+        35
+      ]
+    },
+    {
+      "text": "Lastly, as I have already stated, it is correct to say that the European Fisheries Fund provides for Member States to allocate public aid so as to restructure fishing fleets in line with MSY strategies. This, however, should not be seen as compensation, because the fishing industry will be the eventual beneficiaries of the new policy but as a financial incentive to make the transition.",
+      "start": 5317,
+      "end": 5706,
+      "type": "claim",
+      "sentence_indices": [
+        36,
+        37
+      ]
+    },
+    {
+      "text": "The Commission will continue the dialogue with the fisheries sector and will start to discuss specific long-term plans for a number of fisheries with an MSY perspective. Implementing such plans will improve the stability and the productivity of stocks and of the industry.",
+      "start": 5706,
+      "end": 5979,
+      "type": "claim",
+      "sentence_indices": [
+        38,
+        39
+      ]
+    }
+  ]
+}

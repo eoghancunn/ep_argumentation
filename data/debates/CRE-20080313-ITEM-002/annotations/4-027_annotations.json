@@ -1,0 +1,49 @@
+{
+  "intervention_id": "4-027",
+  "debate_id": "CRE-20080313-ITEM-002",
+  "annotations": [
+    {
+      "text": "In the past Czechoslovakia, just like other countries of the Soviet bloc, was active in developing countries. Our country successfully participated in helping the economies of these countries and now we can tap into this potential.",
+      "start": 138,
+      "end": 370,
+      "sentence_indices": [
+        3,
+        4
+      ]
+    },
+    {
+      "text": "There are also some negatives though due to the fact that external growth resources can never replace internal resources: the economies that find themselves in this situation are often incapable of developing from the inside.",
+      "start": 370,
+      "end": 596,
+      "sentence_indices": [
+        5
+      ]
+    },
+    {
+      "text": "Some time ago, actually quite a long time ago, Gunnar Myrdal published his book ‘Asian Drama’. In this book he contrasts the optimism felt after World War II for example in Africa with the pessimism prevailing in Asian countries.",
+      "start": 596,
+      "end": 826,
+      "sentence_indices": [
+        6,
+        7
+      ]
+    },
+    {
+      "text": "Many Asian countries show strong growth while Africa attracts only 2% of world investment and the economies in many of its countries are in dire straits. There is also the connection with the behaviour of the ruling elites in these two regions, which was in sharp contrast.",
+      "start": 866,
+      "end": 1140,
+      "sentence_indices": [
+        9,
+        10
+      ]
+    },
+    {
+      "text": "One French study compares the behaviour of these elites and shows that while the Asian elite invested in the economy, the African elite hoarded resources that had been created and removed them from their own territories.",
+      "start": 1140,
+      "end": 1360,
+      "sentence_indices": [
+        11
+      ]
+    }
+  ]
+}
