@@ -1,0 +1,71 @@
+{
+  "intervention_id": "3-362",
+  "debate_id": "CRE-20070905-ITEM-015",
+  "annotations": [
+    {
+      "text": "The year 2015 is a political date, not a scientific one. It is too early for some stocks and is too late for others in the context of overfishing.",
+      "start": 348,
+      "end": 495,
+      "type": "claim",
+      "sentence_indices": [
+        2,
+        3
+      ]
+    },
+    {
+      "text": "While the proposal aims to maximise the economic yield of a fishery, and also maintain the capacity of the stock to produce maximum sustainable returns in the long-term, I fear that, far from reducing the levels of discarded catch, critical flaws in the model may cause over-exploitation, as the underlying assumptions used for calculating levels of catch are based on single-species, shallow-water fisheries and do not take account of geographic and biological diversity.",
+      "start": 495,
+      "end": 968,
+      "type": "claim",
+      "sentence_indices": [
+        4
+      ]
+    },
+    {
+      "text": "I applaud the objective of increasing efficiency in protecting fish species, as all of us must do. But I believe that the Commission has not sufficiently researched this. There has been no in-depth evaluation of the risks of error in the MSY model.",
+      "start": 968,
+      "end": 1217,
+      "sentence_indices": [
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "text": "Moreover, for the large majority of scientists and also for the UN Food and Agriculture Organisation, the traditional MSY model has been superseded by new cutting-edge approaches which encompass the ecosystem as a whole, rather than relying on an outdated concept of animal population dynamics.",
+      "start": 1217,
+      "end": 1512,
+      "type": "claim",
+      "sentence_indices": [
+        8
+      ]
+    },
+    {
+      "text": "MSY is a blunt instrument, based on harvesting surplus production during high growth of population before it reaches carrying capacity. But it is one which can lead to overfishing when applied to multi-species fisheries, as you cannot obtain optimum levels of all species at the same time, or when it is applied to pelagic species that dwell in deep seas and open water such as the North Sea and the Atlantic.",
+      "start": 1512,
+      "end": 1922,
+      "sentence_indices": [
+        9,
+        10
+      ]
+    },
+    {
+      "text": "If adopted, this model will simultaneously result in the collapse of stocks and the collapse of the market.",
+      "start": 1922,
+      "end": 2030,
+      "type": "claim",
+      "sentence_indices": [
+        11
+      ]
+    },
+    {
+      "text": "I urge the Commissioner to take a sound, scientific and evidence-based approach. Your own words, Commissioner, are that you should not prejudice the scientific debate.",
+      "start": 2030,
+      "end": 2198,
+      "sentence_indices": [
+        12,
+        13
+      ]
+    }
+  ]
+}

@@ -21,8 +21,52 @@ from itertools import combinations
 import platform
 import torch
 from tqdm import tqdm
+from pathlib import Path
 
-from src.argument_models import ArgumentRelationModel, ArgumentRelationModelOllama
+# Load .env file from project root (backup in case module import didn't load it)
+try:
+    from dotenv import load_dotenv
+    project_root = Path(__file__).parent
+    env_path = project_root / '.env'
+    load_dotenv(dotenv_path=env_path, override=False)
+except ImportError:
+    pass  # python-dotenv not available, will rely on environment variables
+
+from src.argument_models import ArgumentRelationModel, ArgumentRelationModelOllama, ArgumentRelationModelAnthropic
+
+
+def get_model_identifier(args) -> str:
+    """
+    Generate a filesystem-safe identifier for the model being used.
+    
+    Args:
+        args: Parsed command-line arguments
+        
+    Returns:
+        Model identifier string (e.g., 'hf_brunoyun-Llama-3.1-Amelia-AR-8B-v1', 
+        'ollama_llama3.1', 'anthropic_claude-3-5-haiku-20241022')
+    """
+    import re
+    
+    if args.use_anthropic:
+        model_name = args.anthropic_model
+        prefix = "anthropic"
+    elif args.use_ollama:
+        model_name = args.ollama_model
+        prefix = "ollama"
+    else:
+        model_name = args.model
+        prefix = "hf"
+    
+    # Sanitize model name for filesystem: replace special chars with underscores
+    # Keep alphanumeric, dots, dashes, and underscores
+    sanitized = re.sub(r'[^a-zA-Z0-9._-]', '_', model_name)
+    # Replace multiple underscores with single underscore
+    sanitized = re.sub(r'_+', '_', sanitized)
+    # Remove leading/trailing underscores
+    sanitized = sanitized.strip('_')
+    
+    return f"{prefix}_{sanitized}"
 
 
 def is_president_intervention(speaker: Optional[str]) -> bool:
@@ -458,6 +502,9 @@ Examples:
   # Use Ollama instead of local model
   python run_arc_on_claims.py --input results/ --debates-dir data/debates --output results/arc_results.json --use-ollama --ollama-model llama3.1
 
+  # Use Anthropic Haiku (requires ANTHROPIC_API_KEY env var)
+  python run_arc_on_claims.py --input results/ --debates-dir data/debates --output results/arc_results.json --use-anthropic --anthropic-model claude-3-5-haiku-20241022
+
   # Limit to first 100 pairs for testing
   python run_arc_on_claims.py --input results/ --debates-dir data/debates --max-pairs 100 --output results/arc_test.json
 
@@ -483,21 +530,27 @@ Examples:
                       help='Ollama model name (default: llama3.1, only used with --use-ollama)')
     parser.add_argument('--ollama-url', type=str, default=None,
                       help='Ollama API URL (default: from OLLAMA_URL env var or http://localhost:11435, only used with --use-ollama)')
+    parser.add_argument('--use-anthropic', action='store_true',
+                      help='Use Anthropic API instead of loading local model (requires ANTHROPIC_API_KEY in .env or env var)')
+    parser.add_argument('--anthropic-model', type=str, default='claude-3-5-haiku-20241022',
+                      help='Anthropic model name (default: claude-3-5-haiku-20241022, only used with --use-anthropic)')
+    parser.add_argument('--anthropic-api-key', type=str, default=None,
+                      help='Anthropic API key (default: from .env file or ANTHROPIC_API_KEY env var, only used with --use-anthropic)')
     parser.add_argument('--model', type=str,
                       default='brunoyun/Llama-3.1-Amelia-AR-8B-v1',
-                      help='Model name (default: brunoyun/Llama-3.1-Amelia-AR-8B-v1, ignored if --use-ollama)')
+                      help='Model name (default: brunoyun/Llama-3.1-Amelia-AR-8B-v1, ignored if --use-ollama or --use-anthropic)')
     parser.add_argument('--device', type=str, choices=['cuda', 'mps', 'cpu'],
-                      help='Device to use (auto-detect if not specified, ignored if --use-ollama)')
+                      help='Device to use (auto-detect if not specified, ignored if --use-ollama or --use-anthropic)')
     parser.add_argument('--load-in-4bit', action='store_true',
-                      help='Use 4-bit quantization (CUDA only, ignored if --use-ollama)')
+                      help='Use 4-bit quantization (CUDA only, ignored if --use-ollama or --use-anthropic)')
     parser.add_argument('--load-in-8bit', action='store_true',
-                      help='Use 8-bit quantization (works on all platforms, recommended for MPS, ignored if --use-ollama)')
+                      help='Use 8-bit quantization (works on all platforms, recommended for MPS, ignored if --use-ollama or --use-anthropic)')
     
     # Processing options
     parser.add_argument('--max-pairs', type=int,
                       help='Maximum number of pairs to process per type (None = all)')
-    parser.add_argument('--max-new-tokens', type=int, default=128,
-                      help='Maximum number of new tokens to generate (default: 128)')
+    parser.add_argument('--max-new-tokens', type=int, default=None,
+                      help='Maximum number of new tokens to generate (default: 1024 for Anthropic, 128 for others)')
     parser.add_argument('--skip-claim-pairs', action='store_true',
                       help='Skip argument-to-argument relation classification (only do argument-to-report-statement)')
     parser.add_argument('--skip-report-relations', action='store_true',
@@ -529,7 +582,14 @@ Examples:
     
     # Load ARC model
     try:
-        if args.use_ollama:
+        if args.use_anthropic:
+            # Use Anthropic API
+            api_key = args.anthropic_api_key if args.anthropic_api_key else None
+            model = ArgumentRelationModelAnthropic(
+                model_name=args.anthropic_model,
+                api_key=api_key
+            )
+        elif args.use_ollama:
             # Use provided URL or None (which will use env var or default)
             ollama_url = args.ollama_url if args.ollama_url else None
             model = ArgumentRelationModelOllama(
@@ -562,15 +622,20 @@ Examples:
     except Exception as e:
         print(f"Error loading model: {e}")
         if "out of memory" in str(e).lower():
-            print("\nTip: Try using --load-in-8bit, --device cpu, --use-ollama, or reduce --max-pairs")
+            print("\nTip: Try using --load-in-8bit, --device cpu, --use-ollama, --use-anthropic, or reduce --max-pairs")
         elif args.use_ollama:
             print("\nTip: Make sure Ollama is running: ollama serve")
             print(f"      And the model is pulled: ollama pull {args.ollama_model}")
+        elif args.use_anthropic:
+            print("\nTip: Make sure ANTHROPIC_API_KEY is set in .env file or environment variable")
+            print("      Or pass --anthropic-api-key with your API key")
         sys.exit(1)
     
-    # Create output directory structure
-    output_base_dir = args.output
+    # Generate model identifier and create output directory structure
+    model_identifier = get_model_identifier(args)
+    output_base_dir = os.path.join(args.output, model_identifier)
     os.makedirs(output_base_dir, exist_ok=True)
+    print(f"Results will be saved to: {output_base_dir}")
     
     import time
     total_start_time = time.time()
@@ -608,6 +673,9 @@ Examples:
                 if args.max_pairs:
                     debate_max_pairs = args.max_pairs
                 
+                # Use higher default for Anthropic models
+                max_tokens = args.max_new_tokens if args.max_new_tokens is not None else (1024 if args.use_anthropic else 128)
+                
                 argument_to_report_results = classify_arguments_to_report_statements(
                     model,
                     arguments,
@@ -616,7 +684,7 @@ Examples:
                     topic=topic,
                     output_file=argument_to_report_file,
                     max_pairs=debate_max_pairs,
-                    max_new_tokens=args.max_new_tokens
+                    max_new_tokens=max_tokens
                 )
                 
                 debate_results['argument_to_report_statement'] = argument_to_report_results
@@ -631,6 +699,9 @@ Examples:
                 if args.max_pairs:
                     debate_max_pairs = args.max_pairs
                 
+                # Use higher default for Anthropic models
+                max_tokens = args.max_new_tokens if args.max_new_tokens is not None else (1024 if args.use_anthropic else 128)
+                
                 argument_to_argument_results = classify_argument_pairs(
                     model,
                     arguments,
@@ -638,7 +709,7 @@ Examples:
                     topic=topic,
                     output_file=argument_to_argument_file,
                     max_pairs=debate_max_pairs,
-                    max_new_tokens=args.max_new_tokens
+                    max_new_tokens=max_tokens
                 )
                 
                 debate_results['argument_to_argument'] = argument_to_argument_results
@@ -652,10 +723,32 @@ Examples:
         
         total_elapsed = time.time() - total_start_time
         
+        # Prepare model metadata
+        model_metadata = {
+            'model_identifier': model_identifier,
+            'model_type': 'anthropic' if args.use_anthropic else ('ollama' if args.use_ollama else 'huggingface'),
+            'model_name': args.anthropic_model if args.use_anthropic else (args.ollama_model if args.use_ollama else args.model),
+            'device': args.device if not (args.use_anthropic or args.use_ollama) else None,
+            'quantization': {
+                '4bit': args.load_in_4bit if not (args.use_anthropic or args.use_ollama) else False,
+                '8bit': args.load_in_8bit if not (args.use_anthropic or args.use_ollama) else False
+            } if not (args.use_anthropic or args.use_ollama) else None
+        }
+        
+        # Add metadata to results
+        all_results['metadata'] = model_metadata
+        all_results['processing_time_seconds'] = total_elapsed
+        all_results['total_pairs'] = total_pairs
+        
         # Save overall combined results
         combined_output_file = os.path.join(output_base_dir, "all_arc_results.json")
         with open(combined_output_file, 'w', encoding='utf-8') as f:
             json.dump(all_results, f, indent=2, ensure_ascii=False)
+        
+        print(f"\nCompleted! Results saved to: {output_base_dir}")
+        print(f"Model: {model_metadata['model_type']} - {model_metadata['model_name']}")
+        print(f"Total pairs processed: {total_pairs}")
+        print(f"Processing time: {total_elapsed:.2f} seconds")
         
     except KeyboardInterrupt:
         print("\n\nInterrupted by user")

@@ -1,0 +1,39 @@
+{
+  "intervention_id": "4-031",
+  "debate_id": "CRE-20080313-ITEM-002",
+  "annotations": [
+    {
+      "text": "– (RO) Although the draft resolution being debated has ambitious goals, I believe it will be hard to achieve a common policy in the near future, even from as a matter of principle.",
+      "start": 46,
+      "end": 227,
+      "sentence_indices": [
+        1
+      ]
+    },
+    {
+      "text": "Although we all form a large family, each EU Member State has its own priorities with respect to the countries or geographical regions to which regional development cooperation is currently provided; of , priorities which are motivated by economic, geopolitical, ethnic, historical interests etc., and it is unlikely that this pattern can change significantly.",
+      "start": 227,
+      "end": 588,
+      "sentence_indices": [
+        2
+      ]
+    },
+    {
+      "text": "The recent incident related to the declaration of independence by Kosovo showed a lack of unity among the Member States in terms of opinion and, on the same grounds, it is likely that the same diversity of opinion will be shown when the matter under discussion is the situation of our extra-community neighbours.",
+      "start": 588,
+      "end": 901,
+      "sentence_indices": [
+        3
+      ]
+    },
+    {
+      "text": "It is true that a major step was taken with the appointment, under the Lisbon Treaty, of an EU High Representative for Foreign Affairs. However, thanks to lack of clear rules on the determination of community priorities, each Member State will try to promote and focus on development policies, including financial (allotments from the Union budget) on such extra-community regions that coincide with their own priorities.",
+      "start": 901,
+      "end": 1322,
+      "sentence_indices": [
+        4,
+        5
+      ]
+    }
+  ]
+}

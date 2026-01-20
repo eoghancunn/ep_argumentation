@@ -13,6 +13,19 @@ import json
 import os
 import platform
 import re
+from pathlib import Path
+
+try:
+    from dotenv import load_dotenv
+    DOTENV_AVAILABLE = True
+    # Load environment variables from .env file in project root
+    # Get project root (parent of src/ directory)
+    project_root = Path(__file__).parent.parent
+    env_path = project_root / '.env'
+    # Load .env file from project root, don't override existing env vars
+    load_dotenv(dotenv_path=env_path, override=False)
+except ImportError:
+    DOTENV_AVAILABLE = False
 
 try:
     from gradio_client import Client
@@ -25,6 +38,12 @@ try:
     REQUESTS_AVAILABLE = True
 except ImportError:
     REQUESTS_AVAILABLE = False
+
+try:
+    from anthropic import Anthropic
+    ANTHROPIC_AVAILABLE = True
+except ImportError:
+    ANTHROPIC_AVAILABLE = False
 
 
 class ArgumentMiningModel:
@@ -596,6 +615,199 @@ class ArgumentRelationModelOllama:
             
         except requests.exceptions.RequestException as e:
             print(f"Error calling Ollama API: {e}")
+            raise
+
+
+class ArgumentRelationModelAnthropic:
+    """Model for classifying argument relations using Anthropic API."""
+    
+    def __init__(self, model_name: str = "claude-3-5-haiku-20241022", api_key: Optional[str] = None):
+        """
+        Initialize the argument relation model using Anthropic.
+        
+        Args:
+            model_name: Anthropic model name (default: "claude-3-5-haiku-20241022")
+            api_key: Anthropic API key (default: from ANTHROPIC_API_KEY env var)
+        """
+        if not ANTHROPIC_AVAILABLE:
+            raise ImportError(
+                "anthropic is required for Anthropic mode. Install it with: pip install anthropic"
+            )
+        
+        self.model_name = model_name
+        # Get API key from .env file, environment variable, or use provided
+        if api_key is None:
+            # Ensure .env is loaded (in case it wasn't loaded at module import)
+            project_root = Path(__file__).parent.parent
+            env_path = project_root / '.env'
+            
+            if DOTENV_AVAILABLE:
+                from dotenv import load_dotenv
+                # Try loading with override=True to ensure it loads
+                load_dotenv(dotenv_path=env_path, override=True)
+            
+            api_key = os.getenv('ANTHROPIC_API_KEY')
+            
+            # If still not found, try manually parsing .env file as fallback
+            if not api_key and env_path.exists():
+                try:
+                    with open(env_path, 'r', encoding='utf-8') as f:
+                        for line in f:
+                            line = line.strip()
+                            # Skip comments and empty lines
+                            if not line or line.startswith('#'):
+                                continue
+                            # Parse KEY=VALUE format
+                            if '=' in line:
+                                key, value = line.split('=', 1)
+                                key = key.strip()
+                                value = value.strip()
+                                # Remove quotes if present
+                                if value.startswith('"') and value.endswith('"'):
+                                    value = value[1:-1]
+                                elif value.startswith("'") and value.endswith("'"):
+                                    value = value[1:-1]
+                                if key == 'ANTHROPIC_API_KEY':
+                                    api_key = value
+                                    # Set it in environment for future use
+                                    os.environ['ANTHROPIC_API_KEY'] = api_key
+                                    break
+                except Exception as e:
+                    pass  # If manual parsing fails, continue with error message
+            
+            # Also try with strip() in case there's whitespace
+            if api_key:
+                api_key = api_key.strip()
+            if not api_key:
+                # Get project root for helpful error message
+                env_exists = env_path.exists()
+                error_msg = (
+                    "ANTHROPIC_API_KEY not found.\n"
+                    f"  - .env file exists: {env_exists}\n"
+                    f"  - .env file path: {env_path}\n"
+                    "  - Add to .env file: ANTHROPIC_API_KEY=your_api_key_here\n"
+                    "  - Or set the ANTHROPIC_API_KEY environment variable\n"
+                    "  - Or pass --anthropic-api-key with your API key"
+                )
+                raise ValueError(error_msg)
+        
+        self.client = Anthropic(api_key=api_key)
+        
+        # System prompt as specified in the model card (same as ArgumentRelationModel)
+        self.system_prompt = (
+            "You are an expert in argumentation. Your task is to determine the type of relation "
+            "between [SOURCE] and [TARGET]. The type of relation would be in the [RELATION] set. "
+            "Utilize the [TOPIC] as context to support your decision\n"
+            "Your answer must be in the following format with only the type of the relation in the answer section:\n"
+            "e.g. <|ANSWER|>support<|ANSWER|>."
+        )
+        
+        print(f"Using Anthropic for argument relation classification")
+        print(f"Model: {model_name}")
+    
+    def classify_relation(self, source: str, target: str, topic: str = "",
+                         relations: List[str] = None, max_new_tokens: int = 1024) -> Dict[str, Optional[str]]:
+        """
+        Classify the relation between source and target arguments using Anthropic.
+        
+        Args:
+            source: Source argument text
+            target: Target argument text
+            topic: Topic/context for the arguments
+            relations: List of possible relations (default: ['no relation', 'attack', 'support'])
+            max_new_tokens: Maximum number of tokens to generate (max_tokens for Anthropic, default: 1024)
+            
+        Returns:
+            Dictionary with 'relation' (predicted relation type), 'reasoning' 
+            (extracted from <think> tags if present, None otherwise), and 'raw_output' 
+            (complete unprocessed response from Anthropic)
+        """
+        if relations is None:
+            relations = ['no relation', 'attack', 'support']
+        
+        # Format relations as a set string
+        relations_str = "{'" + "', '".join(relations) + "'}"
+        
+        # Create user message (same format as ArgumentRelationModel)
+        user_content = (
+            f"[RELATION]: {relations_str}\n"
+            f"[TOPIC]: {topic}\n"
+            f"[SOURCE]: {source}\n"
+            f"[TARGET]: {target}\n"
+        )
+        
+        try:
+            # Call Anthropic API
+            message = self.client.messages.create(
+                model=self.model_name,
+                max_tokens=max_new_tokens,
+                system=self.system_prompt,
+                messages=[
+                    {
+                        "role": "user",
+                        "content": user_content
+                    }
+                ]
+            )
+            
+            # Extract text from response
+            generated_text = ""
+            if message.content:
+                # Handle both single text block and multiple blocks
+                for block in message.content:
+                    if hasattr(block, 'text'):
+                        generated_text += block.text
+                    elif isinstance(block, str):
+                        generated_text += block
+            
+            generated_text = generated_text.strip()
+            
+            # Store raw output before any processing
+            raw_output = generated_text
+            
+            # Extract reasoning from <think> tags if present
+            reasoning = None
+            if "</think>" in generated_text:
+                # First try to match with opening tag
+                if "<think>" in generated_text:
+                    reasoning_match = re.search(r'<think>(.*?)</think>', 
+                                               generated_text, re.DOTALL)
+                    if reasoning_match:
+                        reasoning = reasoning_match.group(1).strip()
+                        # Remove reasoning from generated_text to get the actual response
+                        generated_text = re.sub(r'<think>.*?</think>', '', 
+                                              generated_text, flags=re.DOTALL).strip()
+                else:
+                    # No opening tag - extract everything before the closing tag
+                    reasoning_match = re.search(r'(.*?)</think>', 
+                                               generated_text, re.DOTALL)
+                    if reasoning_match:
+                        reasoning = reasoning_match.group(1).strip()
+                        # Remove reasoning from generated_text to get the actual response
+                        generated_text = re.sub(r'.*?</think>', '', 
+                                              generated_text, flags=re.DOTALL).strip()
+            
+            # Extract answer from <|ANSWER|> tags (same as ArgumentRelationModel)
+            relation = None
+            if "<|ANSWER|>" in generated_text:
+                parts = generated_text.split("<|ANSWER|>")
+                if len(parts) >= 2:
+                    answer = parts[1].strip()
+                    # Remove any trailing <|ANSWER|> tag
+                    answer = answer.replace("<|ANSWER|>", "").strip()
+                    # Clean up any remaining whitespace or newlines
+                    answer = answer.strip()
+                    if answer:
+                        relation = answer
+            
+            # If no answer found in tags, use the generated text (might be the answer itself)
+            if not relation:
+                relation = generated_text.strip()
+            
+            return {'relation': relation, 'reasoning': reasoning, 'raw_output': raw_output}
+            
+        except Exception as e:
+            print(f"Error calling Anthropic API: {e}")
             raise
 
 
