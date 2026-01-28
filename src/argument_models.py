@@ -369,7 +369,8 @@ class ArgumentRelationModel:
         print("Argument relation model loaded successfully!")
     
     def classify_relation(self, source: str, target: str, topic: str = "",
-                         relations: List[str] = None, max_new_tokens: int = 128) -> Dict[str, Optional[str]]:
+                         relations: List[str] = None, max_new_tokens: int = 128,
+                         few_shot_examples: Optional[List[Dict]] = None) -> Dict[str, Optional[str]]:
         """
         Classify the relation between source and target arguments.
         
@@ -379,6 +380,7 @@ class ArgumentRelationModel:
             topic: Topic/context for the arguments
             relations: List of possible relations (default: ['no relation', 'attack', 'support'])
             max_new_tokens: Maximum number of tokens to generate
+            few_shot_examples: Optional list of example dicts with 'source', 'target', 'relation' keys
             
         Returns:
             Dictionary with 'relation' (predicted relation type) and 'reasoning' (None for this model)
@@ -389,9 +391,24 @@ class ArgumentRelationModel:
         # Format relations as a set string
         relations_str = "{'" + "', '".join(relations) + "'}"
         
+        # Format few-shot examples if provided
+        examples_text = ""
+        if few_shot_examples:
+            examples_parts = []
+            for ex in few_shot_examples:
+                ex_source = ex.get('source', '')
+                ex_target = ex.get('target', '')
+                ex_relation = ex.get('relation', '')
+                if ex_source and ex_target and ex_relation:
+                    examples_parts.append(
+                        f"Example:\n[SOURCE]: {ex_source}\n[TARGET]: {ex_target}\n[RELATION]: {ex_relation}"
+                    )
+            if examples_parts:
+                examples_text = "\n\n".join(examples_parts) + "\n\n"
+        
         # Create user message
         user_content = (
-            f"[RELATION]: {relations_str}\n"
+            f"{examples_text}[RELATION]: {relations_str}\n"
             f"[TOPIC]: {topic}\n"
             f"[SOURCE]: {source}\n"
             f"[TARGET]: {target}\n"
@@ -513,7 +530,8 @@ class ArgumentRelationModelOllama:
             print(f"Make sure Ollama is running: ollama serve")
     
     def classify_relation(self, source: str, target: str, topic: str = "",
-                         relations: List[str] = None, max_new_tokens: int = 128) -> Dict[str, Optional[str]]:
+                         relations: List[str] = None, max_new_tokens: int = 128,
+                         few_shot_examples: Optional[List[Dict]] = None) -> Dict[str, Optional[str]]:
         """
         Classify the relation between source and target arguments using Ollama.
         
@@ -523,6 +541,7 @@ class ArgumentRelationModelOllama:
             topic: Topic/context for the arguments
             relations: List of possible relations (default: ['no relation', 'attack', 'support'])
             max_new_tokens: Maximum number of tokens to generate
+            few_shot_examples: Optional list of example dicts with 'source', 'target', 'relation' keys
             
         Returns:
             Dictionary with 'relation' (predicted relation type), 'reasoning' 
@@ -535,9 +554,24 @@ class ArgumentRelationModelOllama:
         # Format relations as a set string
         relations_str = "{'" + "', '".join(relations) + "'}"
         
+        # Format few-shot examples if provided
+        examples_text = ""
+        if few_shot_examples:
+            examples_parts = []
+            for ex in few_shot_examples:
+                ex_source = ex.get('source', '')
+                ex_target = ex.get('target', '')
+                ex_relation = ex.get('relation', '')
+                if ex_source and ex_target and ex_relation:
+                    examples_parts.append(
+                        f"Example:\n[SOURCE]: {ex_source}\n[TARGET]: {ex_target}\n[RELATION]: {ex_relation}"
+                    )
+            if examples_parts:
+                examples_text = "\n\n".join(examples_parts) + "\n\n"
+        
         # Create user message (same format as ArgumentRelationModel)
         user_content = (
-            f"[RELATION]: {relations_str}\n"
+            f"{examples_text}[RELATION]: {relations_str}\n"
             f"[TOPIC]: {topic}\n"
             f"[SOURCE]: {source}\n"
             f"[TARGET]: {target}\n"
@@ -706,7 +740,8 @@ class ArgumentRelationModelAnthropic:
         print(f"Model: {model_name}")
     
     def classify_relation(self, source: str, target: str, topic: str = "",
-                         relations: List[str] = None, max_new_tokens: int = 1024) -> Dict[str, Optional[str]]:
+                         relations: List[str] = None, max_new_tokens: int = 1024,
+                         few_shot_examples: Optional[List[Dict]] = None) -> Dict[str, Optional[str]]:
         """
         Classify the relation between source and target arguments using Anthropic.
         
@@ -716,6 +751,7 @@ class ArgumentRelationModelAnthropic:
             topic: Topic/context for the arguments
             relations: List of possible relations (default: ['no relation', 'attack', 'support'])
             max_new_tokens: Maximum number of tokens to generate (max_tokens for Anthropic, default: 1024)
+            few_shot_examples: Optional list of example dicts with 'source', 'target', 'relation' keys
             
         Returns:
             Dictionary with 'relation' (predicted relation type), 'reasoning' 
@@ -728,9 +764,24 @@ class ArgumentRelationModelAnthropic:
         # Format relations as a set string
         relations_str = "{'" + "', '".join(relations) + "'}"
         
+        # Format few-shot examples if provided
+        examples_text = ""
+        if few_shot_examples:
+            examples_parts = []
+            for ex in few_shot_examples:
+                ex_source = ex.get('source', '')
+                ex_target = ex.get('target', '')
+                ex_relation = ex.get('relation', '')
+                if ex_source and ex_target and ex_relation:
+                    examples_parts.append(
+                        f"Example:\n[SOURCE]: {ex_source}\n[TARGET]: {ex_target}\n[RELATION]: {ex_relation}"
+                    )
+            if examples_parts:
+                examples_text = "\n\n".join(examples_parts) + "\n\n"
+        
         # Create user message (same format as ArgumentRelationModel)
         user_content = (
-            f"[RELATION]: {relations_str}\n"
+            f"{examples_text}[RELATION]: {relations_str}\n"
             f"[TOPIC]: {topic}\n"
             f"[SOURCE]: {source}\n"
             f"[TARGET]: {target}\n"

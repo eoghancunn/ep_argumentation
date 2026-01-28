@@ -80,8 +80,27 @@ def main():
                       help='Maximum tokens to generate (default: 1024 for Anthropic, 128 for others)')
     parser.add_argument('--overwrite', action='store_true',
                       help='Overwrite existing results (default: skip pairs that already have results)')
+    parser.add_argument('--few-shot', type=str, nargs='?', const='few_shot_examples.json',
+                      help='Enable few-shot examples. Optionally specify path to examples file (default: few_shot_examples.json)')
     
     args = parser.parse_args()
+    
+    # Load few-shot examples if --few-shot is specified
+    few_shot_examples = None
+    if args.few_shot:
+        few_shot_file = args.few_shot
+        try:
+            with open(few_shot_file, 'r', encoding='utf-8') as f:
+                few_shot_examples = json.load(f)
+            if not isinstance(few_shot_examples, list):
+                print(f"Error: Few-shot examples file should contain a list.", file=sys.stderr)
+                sys.exit(1)
+        except FileNotFoundError:
+            print(f"Error: Few-shot examples file not found: {few_shot_file}", file=sys.stderr)
+            sys.exit(1)
+        except Exception as e:
+            print(f"Error: Could not load few-shot examples: {e}", file=sys.stderr)
+            sys.exit(1)
     
     # Load evaluation set
     with open(args.eval_file, 'r', encoding='utf-8') as f:
@@ -130,13 +149,14 @@ def main():
     # Determine output path
     model_identifier = get_model_identifier(args)
     output_path = args.output
+    suffix = "_fewshot" if few_shot_examples else ""
     if os.path.isdir(output_path) or output_path.endswith('/'):
         if not output_path.endswith('/'):
             output_path = output_path + '/'
-        output_path = os.path.join(output_path, f"eval_results_{model_identifier}.json")
+        output_path = os.path.join(output_path, f"eval_results_{model_identifier}{suffix}.json")
     else:
         base, ext = os.path.splitext(output_path)
-        output_path = f"{base}_{model_identifier}{ext}"
+        output_path = f"{base}_{model_identifier}{suffix}{ext}"
     
     # Load existing results if they exist
     existing_results = {}
@@ -209,7 +229,8 @@ def main():
                 source=source_text,
                 target=target_text,
                 topic=topic,
-                max_new_tokens=max_tokens
+                max_new_tokens=max_tokens,
+                few_shot_examples=few_shot_examples
             )
             
             if isinstance(relation_result, dict):

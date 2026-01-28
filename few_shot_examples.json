@@ -1,0 +1,17 @@
+[
+  {
+    "source": "Our basic assumption is that investing in knowledge and the creation of an elite is no less important than distributing charity.",
+    "target": "Time and time again this House elevates the financial objectives into a kind of dogma, without any proper debate, and time and time again we refuse to acknowledge the fundamental causes which are at the root of most developing countries' problems.",
+    "relation": "support"
+  },
+  {
+    "source": "Studies of minimum wage increases in comparable economies found no significant employment effects.",
+    "target": "Raising the minimum wage will increase unemployment.",
+    "relation": "attack"
+  },
+  {
+    "source": "We must take action to address climate change.",
+    "target": "Climate change is a serious threat.",
+    "relation": "no relation"
+  }
+]
