@@ -78,6 +78,8 @@ def main():
     parser.add_argument('--max-pairs', type=int, help='Maximum number of pairs to process')
     parser.add_argument('--max-new-tokens', type=int, default=None,
                       help='Maximum tokens to generate (default: 1024 for Anthropic, 128 for others)')
+    parser.add_argument('--overwrite', action='store_true',
+                      help='Overwrite existing results (default: skip pairs that already have results)')
     
     args = parser.parse_args()
     
@@ -136,11 +138,60 @@ def main():
         base, ext = os.path.splitext(output_path)
         output_path = f"{base}_{model_identifier}{ext}"
     
+    # Load existing results if they exist
+    existing_results = {}
+    if os.path.exists(output_path) and not args.overwrite:
+        try:
+            with open(output_path, 'r', encoding='utf-8') as f:
+                existing_data = json.load(f)
+                # Handle both list and dict formats
+                if isinstance(existing_data, list):
+                    for result in existing_data:
+                        pair_id = result.get('pair_id')
+                        if pair_id:
+                            existing_results[pair_id] = result
+                elif isinstance(existing_data, dict) and 'results' in existing_data:
+                    for result in existing_data['results']:
+                        pair_id = result.get('pair_id')
+                        if pair_id:
+                            existing_results[pair_id] = result
+        except Exception as e:
+            tqdm.write(f"Warning: Could not load existing results: {e}")
+    
+    # Filter pairs: skip those that already have valid relations
+    valid_relations = {'support', 'attack', 'no relation'}
+    pairs_to_process = []
+    
+    for pair in pairs:
+        source = pair.get('source', {})
+        target = pair.get('target', {})
+        pair_id = f"{source.get('full_identifier', 'unknown')}_vs_{target.get('full_identifier', 'unknown')}"
+        
+        if args.overwrite:
+            # Process all pairs if overwriting
+            pairs_to_process.append(pair)
+        else:
+            # Check if this pair already has a valid relation
+            existing_result = existing_results.get(pair_id)
+            if existing_result:
+                existing_relation = existing_result.get('relation', '').lower().strip()
+                if existing_relation in valid_relations:
+                    continue  # Skip this pair, already labeled
+            pairs_to_process.append(pair)
+    
+    if not pairs_to_process:
+        print(f"All pairs already have results. Use --overwrite to regenerate.")
+        sys.exit(0)
+    
+    skipped_count = len(pairs) - len(pairs_to_process)
+    if skipped_count > 0:
+        print(f"Skipping {skipped_count} pairs that already have results")
+    
     # Run model on pairs
     max_tokens = args.max_new_tokens if args.max_new_tokens is not None else (1024 if args.use_anthropic else 128)
     
-    results = []
-    pbar = tqdm(pairs, desc="Processing")
+    new_results = []
+    pbar = tqdm(pairs_to_process, desc="Processing")
     
     for pair in pbar:
         source = pair.get('source', {})
@@ -166,8 +217,10 @@ def main():
             else:
                 relation = relation_result
             
-            results.append({
-                'pair_id': f"{source.get('full_identifier', 'unknown')}_vs_{target.get('full_identifier', 'unknown')}",
+            pair_id = f"{source.get('full_identifier', 'unknown')}_vs_{target.get('full_identifier', 'unknown')}"
+            
+            new_results.append({
+                'pair_id': pair_id,
                 'source': source,
                 'target': target,
                 'relation': relation
@@ -178,15 +231,26 @@ def main():
     
     pbar.close()
     
+    # Merge new results with existing results
+    if args.overwrite:
+        # Overwrite mode: use only new results
+        all_results = new_results
+    else:
+        # Merge mode: combine existing and new results (new results override existing)
+        merged_dict = existing_results.copy()
+        for result in new_results:
+            merged_dict[result['pair_id']] = result
+        all_results = list(merged_dict.values())
+    
     # Save results
     output_dir = os.path.dirname(output_path)
     if output_dir:
         os.makedirs(output_dir, exist_ok=True)
     
     with open(output_path, 'w', encoding='utf-8') as f:
-        json.dump(results, f, indent=2, ensure_ascii=False)
+        json.dump(all_results, f, indent=2, ensure_ascii=False)
     
-    print(f"Saved {len(results)} results to {output_path}")
+    print(f"Saved {len(all_results)} total results ({len(new_results)} new) to {output_path}")
 
 
 if __name__ == "__main__":
