@@ -82,6 +82,8 @@ def main():
                       help='Overwrite existing results (default: skip pairs that already have results)')
     parser.add_argument('--few-shot', type=str, nargs='?', const='few_shot_examples.json',
                       help='Enable few-shot examples. Optionally specify path to examples file (default: few_shot_examples.json)')
+    parser.add_argument('--class-definitions', type=str, nargs='?', const='class_definitions.json',
+                      help='Enable class definitions. Optionally specify path to definitions file (default: class_definitions.json)')
     
     args = parser.parse_args()
     
@@ -100,6 +102,23 @@ def main():
             sys.exit(1)
         except Exception as e:
             print(f"Error: Could not load few-shot examples: {e}", file=sys.stderr)
+            sys.exit(1)
+    
+    # Load class definitions if --class-definitions is specified
+    class_definitions = None
+    if args.class_definitions:
+        definitions_file = args.class_definitions
+        try:
+            with open(definitions_file, 'r', encoding='utf-8') as f:
+                class_definitions = json.load(f)
+            if not isinstance(class_definitions, list):
+                print(f"Error: Class definitions file should contain a list.", file=sys.stderr)
+                sys.exit(1)
+        except FileNotFoundError:
+            print(f"Error: Class definitions file not found: {definitions_file}", file=sys.stderr)
+            sys.exit(1)
+        except Exception as e:
+            print(f"Error: Could not load class definitions: {e}", file=sys.stderr)
             sys.exit(1)
     
     # Load evaluation set
@@ -149,7 +168,12 @@ def main():
     # Determine output path
     model_identifier = get_model_identifier(args)
     output_path = args.output
-    suffix = "_fewshot" if few_shot_examples else ""
+    suffixes = []
+    if few_shot_examples:
+        suffixes.append("fewshot")
+    if class_definitions:
+        suffixes.append("defs")
+    suffix = "_" + "_".join(suffixes) if suffixes else ""
     if os.path.isdir(output_path) or output_path.endswith('/'):
         if not output_path.endswith('/'):
             output_path = output_path + '/'
@@ -230,7 +254,8 @@ def main():
                 target=target_text,
                 topic=topic,
                 max_new_tokens=max_tokens,
-                few_shot_examples=few_shot_examples
+                few_shot_examples=few_shot_examples,
+                class_definitions=class_definitions
             )
             
             if isinstance(relation_result, dict):

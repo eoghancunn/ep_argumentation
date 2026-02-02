@@ -1,0 +1,14 @@
+[
+    {
+        "class": "support",
+        "description": "The source argument provides a reason to make the target argument more acceptable. Consistency, or agreement between the source and target is not sufficient grounds to classify as support."
+    },
+    {
+        "class": "attack",
+        "description": "The source argument provides a reason to make the target argument less acceptable. Inconsistency, or disagreement between the source and target is sufficient grounds to classify as attack."
+    },
+    {
+        "class": "no relation",
+        "description": "Cannot be classified as support or attack."
+    }
+]

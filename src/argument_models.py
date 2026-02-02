@@ -370,7 +370,8 @@ class ArgumentRelationModel:
     
     def classify_relation(self, source: str, target: str, topic: str = "",
                          relations: List[str] = None, max_new_tokens: int = 128,
-                         few_shot_examples: Optional[List[Dict]] = None) -> Dict[str, Optional[str]]:
+                         few_shot_examples: Optional[List[Dict]] = None,
+                         class_definitions: Optional[List[Dict]] = None) -> Dict[str, Optional[str]]:
         """
         Classify the relation between source and target arguments.
         
@@ -381,6 +382,7 @@ class ArgumentRelationModel:
             relations: List of possible relations (default: ['no relation', 'attack', 'support'])
             max_new_tokens: Maximum number of tokens to generate
             few_shot_examples: Optional list of example dicts with 'source', 'target', 'relation' keys
+            class_definitions: Optional list of dicts with 'class' and 'description' keys
             
         Returns:
             Dictionary with 'relation' (predicted relation type) and 'reasoning' (None for this model)
@@ -390,6 +392,18 @@ class ArgumentRelationModel:
         
         # Format relations as a set string
         relations_str = "{'" + "', '".join(relations) + "'}"
+        
+        # Format class definitions if provided
+        definitions_text = ""
+        if class_definitions:
+            definitions_parts = []
+            for defn in class_definitions:
+                class_name = defn.get('class', '')
+                description = defn.get('description', '')
+                if class_name and description:
+                    definitions_parts.append(f"{class_name}: {description}")
+            if definitions_parts:
+                definitions_text = "Class Definitions:\n" + "\n".join(definitions_parts) + "\n\n"
         
         # Format few-shot examples if provided
         examples_text = ""
@@ -408,7 +422,7 @@ class ArgumentRelationModel:
         
         # Create user message
         user_content = (
-            f"{examples_text}[RELATION]: {relations_str}\n"
+            f"{definitions_text}{examples_text}[RELATION]: {relations_str}\n"
             f"[TOPIC]: {topic}\n"
             f"[SOURCE]: {source}\n"
             f"[TARGET]: {target}\n"
@@ -531,7 +545,8 @@ class ArgumentRelationModelOllama:
     
     def classify_relation(self, source: str, target: str, topic: str = "",
                          relations: List[str] = None, max_new_tokens: int = 128,
-                         few_shot_examples: Optional[List[Dict]] = None) -> Dict[str, Optional[str]]:
+                         few_shot_examples: Optional[List[Dict]] = None,
+                         class_definitions: Optional[List[Dict]] = None) -> Dict[str, Optional[str]]:
         """
         Classify the relation between source and target arguments using Ollama.
         
@@ -542,6 +557,7 @@ class ArgumentRelationModelOllama:
             relations: List of possible relations (default: ['no relation', 'attack', 'support'])
             max_new_tokens: Maximum number of tokens to generate
             few_shot_examples: Optional list of example dicts with 'source', 'target', 'relation' keys
+            class_definitions: Optional list of dicts with 'class' and 'description' keys
             
         Returns:
             Dictionary with 'relation' (predicted relation type), 'reasoning' 
@@ -553,6 +569,18 @@ class ArgumentRelationModelOllama:
         
         # Format relations as a set string
         relations_str = "{'" + "', '".join(relations) + "'}"
+        
+        # Format class definitions if provided
+        definitions_text = ""
+        if class_definitions:
+            definitions_parts = []
+            for defn in class_definitions:
+                class_name = defn.get('class', '')
+                description = defn.get('description', '')
+                if class_name and description:
+                    definitions_parts.append(f"{class_name}: {description}")
+            if definitions_parts:
+                definitions_text = "Class Definitions:\n" + "\n".join(definitions_parts) + "\n\n"
         
         # Format few-shot examples if provided
         examples_text = ""
@@ -571,7 +599,7 @@ class ArgumentRelationModelOllama:
         
         # Create user message (same format as ArgumentRelationModel)
         user_content = (
-            f"{examples_text}[RELATION]: {relations_str}\n"
+            f"{definitions_text}{examples_text}[RELATION]: {relations_str}\n"
             f"[TOPIC]: {topic}\n"
             f"[SOURCE]: {source}\n"
             f"[TARGET]: {target}\n"
@@ -741,7 +769,8 @@ class ArgumentRelationModelAnthropic:
     
     def classify_relation(self, source: str, target: str, topic: str = "",
                          relations: List[str] = None, max_new_tokens: int = 1024,
-                         few_shot_examples: Optional[List[Dict]] = None) -> Dict[str, Optional[str]]:
+                         few_shot_examples: Optional[List[Dict]] = None,
+                         class_definitions: Optional[List[Dict]] = None) -> Dict[str, Optional[str]]:
         """
         Classify the relation between source and target arguments using Anthropic.
         
@@ -752,6 +781,7 @@ class ArgumentRelationModelAnthropic:
             relations: List of possible relations (default: ['no relation', 'attack', 'support'])
             max_new_tokens: Maximum number of tokens to generate (max_tokens for Anthropic, default: 1024)
             few_shot_examples: Optional list of example dicts with 'source', 'target', 'relation' keys
+            class_definitions: Optional list of dicts with 'class' and 'description' keys
             
         Returns:
             Dictionary with 'relation' (predicted relation type), 'reasoning' 
@@ -763,6 +793,18 @@ class ArgumentRelationModelAnthropic:
         
         # Format relations as a set string
         relations_str = "{'" + "', '".join(relations) + "'}"
+        
+        # Format class definitions if provided
+        definitions_text = ""
+        if class_definitions:
+            definitions_parts = []
+            for defn in class_definitions:
+                class_name = defn.get('class', '')
+                description = defn.get('description', '')
+                if class_name and description:
+                    definitions_parts.append(f"{class_name}: {description}")
+            if definitions_parts:
+                definitions_text = "Class Definitions:\n" + "\n".join(definitions_parts) + "\n\n"
         
         # Format few-shot examples if provided
         examples_text = ""
@@ -781,7 +823,7 @@ class ArgumentRelationModelAnthropic:
         
         # Create user message (same format as ArgumentRelationModel)
         user_content = (
-            f"{examples_text}[RELATION]: {relations_str}\n"
+            f"{definitions_text}{examples_text}[RELATION]: {relations_str}\n"
             f"[TOPIC]: {topic}\n"
             f"[SOURCE]: {source}\n"
             f"[TARGET]: {target}\n"
